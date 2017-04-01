@@ -1,0 +1,41 @@
+
+table.calendar { 
+/* Mutable attributes */
+	color: slategray;
+	background-color: white;
+	border: 1px solid;
+	font-family: monospace;
+	font-size: 12px;
+/* Less Mutable attributes */	
+	text-align: center;
+	empty-cells: hide;
+	border-collapse: seperate;
+	border-radius: 10px;
+	border-spacing: 0; 
+}
+
+tr.calendar:nth-child(even) td { background: #FFF1F1; }   
+tr.calendar:nth-child(odd) td { background: #FEFEFE; }  
+tr.calendar td.calendar:hover { background-color: salmon; }
+
+thead.calendar {
+	background: white;
+	color: slategray;
+	font-family: ariel;
+	font-size: 14;
+}
+
+th.calendar {
+	background: #DF7777;           /* Darken header a bit */
+	font-weight: bold;
+	border: 1px solid transparent; /* No more visible border */
+	transition: all 0.3s;          /* Simple transition for hover effect */
+}
+
+td.calendar {
+	background: #FAFAFA;
+	text-align: center;
+	border: 1px solid transparent; /* No more visible border */
+	transition: all 0.3s;  /* Simple transition for hover effect */
+
+}

@@ -1,0 +1,31 @@
+
+table.calendar { 
+color: #333;
+border: 1px solid;
+font-family: monospace;
+font-size: 8px;
+border-collapse: seperate;
+empty-cells: hide;
+border-radius: 10px;
+border-spacing: 0; 
+}
+
+th.calendar {
+background: #DFDFDF;  /* Darken header a bit */
+font-weight: bold;
+border: 1px solid transparent; /* No more visible border */
+transition: all 0.3s;  /* Simple transition for hover effect */
+}
+
+td.calendar {
+background: #FAFAFA;
+text-align: center;
+border: 1px solid transparent; /* No more visible border */
+transition: all 0.3s;  /* Simple transition for hover effect */
+}
+
+tr.calendar:nth-child(even) td { background: #F1F1F1; }   
+
+tr.calendar:nth-child(odd) td { background: #FEFEFE; }  
+
+tr.calendar td.calendar:hover { background: #666; color: #FFF; } /* Hover cell effect! */

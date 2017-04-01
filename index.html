@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+
+<html>
+
+<head>	
+	<meta http-equiv="Cache-Control" content="no-store" />
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<!--
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="client.js">
+
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+-->	    
+<!--   Local includes -->
+	<link rel="stylesheet" href="/styles/site.css">	
+	<image hidden src="images/dean.jpg" id="mypic" align="left" > 
+	<script src="pages.js"></script>
+	<script src="tableHelper.js"></script>
+	<script src="tools/misc.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body onload="initSite()">
+	<div class="w3-container" id="main">
+<!-- Layouts for each "page" 
+<!-- Home
+		<table id="homePage">
+			<tr>
+				<td class="portraitDean"/>
+				<td id="bio"/>
+			<tr>
+		<table>
+<!-- File view 
+		<div id="fileView" visibility="hidden"/>
+<!-- Tools 
+		<div id="tools" visibility="hidden"/>
+<!-- Blogs
+		<div id="tools" visibility="hidden"/>
+<!-- Galleries 
+		<div id="galleries" visibility="hidden"/>	-->
+	</div>
+</body>
+
+<script>  // routines to be relocated...
+'use strict';
+
+// Read a file and it's contents to "textNode"	
+	function readFile(remoteFilePath, textNode) {
+	    $(document).ready(function() {
+			$.get(remoteFilePath, function(data) {
+				console.log("readFile: read " + data.length + " bytes :: " + data);
+				textNode.nodeValue = data;
+			}, "text");
+		});
+	}
+	function listFiles(remoteFilePath) {
+	    $(document).ready(function() {
+			$.get(remoteFilePath, function(data) {
+				var node = document.getElementById("content");
+				console.log("readFile: read " + data.length + " bytes :: " + data);
+				var myTable = tableFromFileList(data);
+				node.appendChild(myTable);
+			}, "text");
+		});	
+	}
+    var clearContent = function(node) {
+		var node = document.getElementById("content");
+		while (node.firstChild) {
+			node.removeChild(node.firstChild);
+		}
+	}
+
+</script>
+
+<script>
+	function initSite() {
+		console.log("Beginning script");
+		console.log("loading google charts");
+		google.charts.load('current', {'packages':['corechart']});
+		var header = document.createElement("header");	
+		var navBar = document.createElement("nav");
+		var footer = document.createElement("footer");
+		var content  = document.createElement("content");
+		content.id = "content"
+		var banner   = "Pinckert Software Consulting";
+		var siteNode = document.createTextNode(banner);
+		header.appendChild(siteNode);
+		var navList = navBar.appendChild(document.createElement("ul"));
+		var nav = { 
+				 "Home":         goHome, 
+				 "Environment":  goEnvironment, 
+				 "File View":    goFiles, 
+				 "Resume":       goAbout, 
+				 "DB Test":      goDB, 
+				 "Test":		 goTest,
+//				 "Code Samples": goCode, 
+//				 "Galleries":    goPics, 
+		};
+
+		for (key in nav)
+		{
+			var listItem = document.createElement("li");
+			var link = listItem.appendChild(document.createElement("a"));
+			listItem.id = "nav"+key;
+			link.appendChild(document.createTextNode(key));
+			link.href="#"; 
+			listItem.addEventListener("click", nav[key]);
+			listItem.addEventListener("mouseover", function() {
+				this.style.backgroundColor = "lightpink";
+			});
+			listItem.addEventListener("mouseout", function() {
+				this.style.backgroundColor = "lavenderblush";
+			});
+			navList.appendChild(listItem);
+		}
+
+		var footNode = document.createTextNode(navigator.userAgent);
+		footer.appendChild(footNode);
+		var main = document.getElementById("main");
+	
+		main.appendChild(header);
+		main.appendChild(navBar);
+		main.appendChild(content);
+		main.appendChild(footer);
+		goHome();
+	}
+</script>
+</html>
+
+

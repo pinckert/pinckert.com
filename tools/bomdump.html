@@ -1,0 +1,10 @@
+<body>
+<script>
+for (var propName in window) {
+//	document.write("<p>" + propName +"<p>");
+    var value = eval("window." + propName);
+	document.write("<p>" + propName + " " + value + "<p>");
+
+}
+</script>
+</body>

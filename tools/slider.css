@@ -1,0 +1,17 @@
+
+svg.slider {
+	width: 400px;
+	height: 200px;
+}
+
+line.slider {
+	stroke-width: 2;
+	stroke-opacity: 80;
+	stroke: black;
+	
+}
+
+polygon.slider {
+/*	points: 160,30,165,155,40,150,20; */
+	fill: pink;
+}

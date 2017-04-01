@@ -1,0 +1,8 @@
+'use strict';
+
+var styleList = {
+//   Property    CSS           Javascript   HTML   Options
+        "align" : ["border-style", "border",              [  "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "ouset", "none", "hidden"]
+   
+}
+w3-left-align
