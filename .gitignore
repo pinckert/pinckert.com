@@ -1,0 +1,8 @@
+
+# Collected Data
+data_collection/ApacheCommons/
+data_collection/servers/
+data_collection/views/
+
+# Gallery .jpeg files
+gallery/
