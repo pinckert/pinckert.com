@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+
+<html>
+<head>
+
+	<script src="DOMutil.js"> </script>
+	<script src="calendar.js"> </script>
+	<script src="../misc.js"> </script>
+	<link rel="stylesheet" type="text/css" href="calendar.css" media="screen" />
+
+	<title>Calendar</title>
+	
+</head>
+
+<div id="interface">
+   <pre> 
+       This is a simple example of the calendar control, it displays the month along with the astrological sign for each day.
+        --  On month change, it updates each day with the appropriate astrological sign for that day.
+        --  When the mouse hovers over a day, a text field updates with that day.
+        --  When a day is clicked, the date clicked appears in a pop-up. 
+   </pre>
+   <pre>
+       Example: 
+           foo = new calendar("my_div",        // DOM element name that is to be the parent for the calendar
+                              "myCalendar",    // DOM element name to be assigned to the calender table.
+                              onMonthChange,   // Function to be called when the calendar changes month
+                                               // It receives two arguements, the date and an array of DOM elements.
+                                               // eg. function onMonthChange(date, elementList)
+                                               // The list is '1' based, to correspond with the days of the month.
+                                               //
+                              onClick,         // Function that is called when a cell is clicked. It receives one
+                                               // parameter, the date that was clicked.
+                                               // eg. function OnClick(date)
+                                               //
+                              onHover)         // Function that is called when the mouse is over a cell. It also receives
+                                               // one paramert, the date over which the mouse is hovering.
+                                               // eg. function onHover(date) 
+                              
+  </pre>  
+</div>
+<table>
+<tr>
+    <td>
+       <div id="test" align="left" bgcolor="#ffffff">
+       </div>
+    </td>
+    <td>
+       <div id="test2" align="left" bgcolor="#ffffff">
+       </div>
+    </td>
+</tr>
+</table>
+
+<div align ="center" id="today_id">The date being hovered over will appear here.</div>
+
+    <script type="text/javascript">
+
+        function monthChangeCallback(date, nodeList)
+        {
+           for (i=1;i<nodeList.length; i++)
+           {
+              var month = calendar.monthName[date.getMonth()];
+              addNode(nodeList[i], "br");
+              var tmp = addNode(nodeList[i], "text", month, horoscope(date.getMonth(), i));
+           }
+        }
+
+        function clickCallback(date)
+        {
+            alert(formatDate(date));
+        }    
+          
+        function hoverCallback(date)
+        {
+            var foo = document.getElementById("today_id");
+            foo.firstChild.nodeValue = formatDate(date);
+        }
+
+        // function to have something to do...
+        // month is 0 based int, day is 1 based int.
+        //
+        function horoscope(month, day)
+        {
+            if (month == 0) {
+                if (day < 21) return "Capricorn";   return "Aquarius";   }
+            else if (month == 1) {
+                if (day < 20) return "Aquarius";    return "Pieces";     }
+            else if (month == 2) {
+                if (day < 21) return "Piesces";     return "Aries";      }
+            else if (month == 3) {
+                if (day < 21) return "Aries";       return "Taurus";     }
+            else if (month == 4) {           
+                if (day < 22) return "Taurus";      return "Gemini";     }
+            else if (month == 5) {           
+                if (day < 22) return "Gemini";      return "Cancer";     }
+            else if (month == 6) {
+                if (day < 23) return "Cancer";      return "Leo";        }
+            else if (month == 7) {
+                if (day < 23) return "Leo";         return "Virgo";      }
+            else if (month == 8) {
+                if (day < 24) return "Virgo";       return "Libra";      }
+            else if (month == 9) {
+                if (day < 24) return "Libra";       return "Scorpio";    }
+            else if (month == 10) {
+                if (day < 23) return "Scorpio";     return "Sagittarius";}
+            else if (month == 11) {
+                if (day < 22) return "Sagittarius"; return "Aquarius";   }
+        
+            return "unknown";
+		}
+		
+		function formatDate(today)
+		{
+			return today.toLocaleDateString();
+		}
+
+		// * MAIN * 
+        var cal = new calendar("test", "myCalendar", monthChangeCallback, clickCallback, hoverCallback);
+		isA(calendar, 1);
+        var cal2 = new calendar("test2", "myCalendar2", monthChangeCallback, clickCallback, hoverCallback);
+
+		console.dir(cal);
+		console.dir(cal2);
+		
+    </script>
+
+</body>
+</html>
