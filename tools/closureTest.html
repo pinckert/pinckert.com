@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+
+<html>
+<button>one</button>
+<button>two</button>
+<button>three</button>
+<button>four</button>
+
+<script>
+'use strict'
+function palindrome(str){
+	for (var i=0; i<str.length/2; i++) {
+		if (str[i] != str[str.length-(i+1)]){
+			return false;
+		}
+	}
+	return true;
+}
+
+console.log(palindrome("abba"));
+/*
+var nodes = document.getElementsByTagName('button');
+for (var i = 0; i < nodes.length; i++) {
+   nodes[i].i = i;
+   nodes[i].addEventListener('click', function() {
+      console.log('You clicked element #' + this.i);
+   });
+}
+*/
+
+var nodes = document.getElementsByTagName('button');
+for (var i = 0; i < nodes.length; i++) {
+   nodes[i].addEventListener('click',  (function(i) {
+      return function() {
+         console.log('You clicked element #' + i);
+      }
+   })(i));
+}
+
+</script>
+</html>

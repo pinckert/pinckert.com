@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<!-- Copyright 2016-2017 Dean Pinckert  http://www.pinckert.com/copyright.html -->
+
+<html>
+
+<head>	
+
+<!--   Local includes -->
+
+<script src="../tableHelper.js"></script>
+<link rel="stylesheet" href="../styles/site.css">	
+	
+</head>
+<script>
+	var data = [
+			{a: 'Thor',      b: 1, c: 3.14, d: "July 10, 2017"},
+			{a: 'Iron Man',  b: 2, c: 1.41, d: "May 5, 2014"},
+			{a: 'Hawkeye',   b: 3, c: 2.71, d: "10/11/17"},
+			{a: 'T\'Challa', b: 4, c: 6.23, d: "apr 24, 1977"},
+			{a: 'Spiderman', b: 5, c: 6.67, d: "09-26-1999"},
+			{a: 'Wolverine', b: 6, c: 3.36, d: "16-March-2012"},
+
+	];
+	function initSite()
+	{
+		var node = document.getElementById("main");
+		var table = sortableTableFromDictArray(data, {'a' : sort_alpha, 'b': sort_int, 'c' : sort_int, 'd': sort_int, 'e': sort_date});
+		node.appendChild(table);
+	}
+	
+	</script>
+<body onload="initSite()">
+	<div class="w3-container" id="main">
+	<p>Example table with sortable columns</p>
+	
+</body>
+
+</script>
+</html>

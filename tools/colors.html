@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../styles/site.css">
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+   <script src="colors.js"></script>
+</head>
+<body onload="buildColorTable()">
+<table style="margin-top:30px">
+<caption style="background-color:beige;"><h3>Determine the closest named color given RGB values</h3></caption>
+<tr>
+	<td style="color:black; background-color:beige; vertical-align:top;">
+		<p>
+			<input style="background-color:tomato;" class="w3-input"type="number" value=63 id="redInput">Red</input><br>
+			<input style="background-color:lime;" class="w3-input" type="number"  value=128 id="greenInput">Green</input><br>
+			<input style="background-color:skyblue;" class="w3-input" type="number" value=128 id="blueInput">Blue</input><br>
+			<button class="w3-btn w3-round" onClick="determineColor()">Check</button>
+			<text id="colorname">[closest match]</text><br>
+		</p>
+		<table>
+			<th id="namedColor" style="background-color:seagreen">Named</th>
+			<th id="actualColor" style="background-color:rgb(63,128,128)">Actual</th>
+		</table>
+	</td>
+	<td>
+		<table id="colorChart">
+		</table>
+	</td>
+</tr>
+</table>
+
+</body>
+</html>
