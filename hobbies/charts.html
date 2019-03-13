@@ -1,1 +1,172 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="spinners.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var sessionsByName = {};
+		var allSessions = [];
+		var archivedSessions = [];
+	</script>
+	<script type="text/javascript" src="sessions.js"></script>
+	<script type="text/javascript" src="spinners.js"></script>
+	<title>The Spinners</title>
+	<style>
+	td {
+		text-align: left;
+		width: 600px; height: 250px;
+	}
+	</style>
+</head>
+<body>
 
+	<div id="main"></div>
+	<script type="text/javascript">
+
+window.onload = function() {
+	google.charts.load('current', {'packages':['corechart']});
+	google.charts.setOnLoadCallback(drawCharts);	
+};
+
+// Not currently used...	
+function selectHandler(chart,chartData, callback) {
+	myChart = chart;
+	console.dir(chart);
+	return function() {
+			console.log ("in selection handler execution");
+			var selection = chart.getSelection();
+     		var label = chartData.getValue(selection[0].row, 0);
+			var value = chartData.getValue(selection[0].row, 1);		
+			console.log("Label = " + label + " Value = " + value);
+			console.dir(chartData);
+			callback(selection, chartData);
+	}
+}
+
+const chartOptions = {
+        legend: { position: 'right', maxLines: 3 },
+		hAxis: {format: '#', gridlines: {count: 5}},
+		vAxis : {title : "Opponent Rank"},
+		backgroundColor: '#FFFAFA'
+};  
+	
+function extractIndividualRecords()	 {
+	console.log("Extract Individual Records()");
+	var players = {};
+	var killList = ['Karan', 'Yogesh', 'Charishma'];
+	allSessions = [currentSession].concat(archivedSessions);
+	for (var i in allSessions) {
+		var teamMatches = allSessions[i].matches;
+		for (var j in teamMatches) {
+			var playerMatches = teamMatches[j].matches;
+			for (var player in playerMatches) {
+				var playerName = playerMatches[player].player;
+				console.dir(playerMatches[player]);
+				if (playerName == '' || playerMatches[player].result == '') continue;   // workaround for 'future' matches
+				if (!players.hasOwnProperty(playerName)){
+					players[playerName] = {}
+					players[playerName].matches = [];
+					players[playerName].games =[];
+				}
+				updatePlayer(players[playerName], playerMatches[player]);
+				console.dir(players[playerName]);
+			}
+		}
+	}
+	return players;
+}
+
+function updatePlayer(playerRecord, individualMatch){
+//	console.log("Update Player()");
+//	console.dir(playerRecord.matches);
+//	console.dir(individualMatch);
+	var found = 0;
+	var oppRank = individualMatch.oppRank;
+	if (oppRank == undefined) return;         // handle case for Forfeit.
+	
+	var ranks = playerRecord.matches.map(function(rank) { return rank[0]; } );
+	var won  = individualMatch.result[0].toUpperCase() == 'W' | 0;  // convert Boolean to int
+	var lost = !won | 0;
+	if (ranks.includes(oppRank)) {
+		for (var i in ranks) {
+			if (playerRecord.matches[i][0] == oppRank) {
+				playerRecord.matches[i][1] += won;
+				playerRecord.matches[i][2] += lost;
+				playerRecord.games[i][1] += individualMatch.wins;
+				playerRecord.games[i][2] += individualMatch.losses;
+				break;
+			}
+		}
+		previousMatchTotals = playerRecord.matches.filter(function(rank) {return rank[0] == oppRank;} );
+		previousGameTotals  = playerRecord.games.filter(function(rank) {return rank[0] == oppRank;} );
+//		console.log("Found record for opponent rank", oppRank);
+	} else {  //first match with this opponent rank
+		playerRecord.matches.push([oppRank, won, lost, '']);
+		playerRecord.games.push([oppRank, individualMatch.wins, individualMatch.losses, '']);
+	}
+//	console.log("Leave: Update Player()");
+}
+	
+
+function insertChart(playerName) {
+	var main = document.getElementById("main");
+	var header = document.createElement("h3");
+	header.append(document.createTextNode(playerName));
+	main.append(header);
+	var chartTable = document.createElement("table");
+	var firstRow   = document.createElement("tr");
+	var firstChart = document.createElement("td");
+	firstChart.id = playerName;
+	var secondChart = document.createElement("td");
+	firstRow.append(firstChart);
+	firstRow.append(secondChart);
+	chartTable.append(firstRow);
+	main.append(chartTable);
+};
+
+const chartHeader = ['Label', 'Wins', 'Losses',{ role: 'annotation' } ];
+
+function drawCharts() {
+
+	var players = extractIndividualRecords();
+	var chartData = [];
+	
+	console.dir(players);
+	for (var playerName in players) {
+		console.log("building chart data for ", playerName);
+        console.dir(players[playerName].matches);
+		
+		players[playerName].matches.unshift(chartHeader);
+		players[playerName].games.unshift(chartHeader);
+
+		chartData[playerName] = {
+							matches: google.visualization.arrayToDataTable(players[playerName].matches),
+							games:   google.visualization.arrayToDataTable(players[playerName].games),
+		}
+	
+		insertChart(playerName);
+		var matchNode = document.getElementById(playerName);
+		var matches  = new google.visualization.BarChart(matchNode);
+		var gameNode = matchNode.nextSibling;
+		var games    = new google.visualization.BarChart(gameNode); 
+		
+		chartOptions['title'] = 'matches';
+		matches.draw(chartData[playerName]['matches'], chartOptions);
+		chartOptions['title'] = 'games';			
+		games.draw(chartData[playerName]['games'], chartOptions);
+	
+	}
+}
+
+		</script>
+
+	<body>
+		<div id="main" width=1300px></div>
+	</body>
+</html>
