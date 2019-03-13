@@ -1,22 +1,21 @@
 <!DOCTYPE HTML>
 <meta charset="UTF-8">
-<!-- Copyright 2016-2017 Dean Pinckert  http://www.pinckert.com/copyright.html -->
+<!-- Copyright 2016-2018 Dean Pinckert  http://www.pinckert.com/copyright.html -->
 
 <html>
 
 <head>	
 	<meta http-equiv="Cache-Control" content="no-store" />
-	
+	<title>Pinckert.com</title>
 <!-- External includes -->
 	
-    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <!--
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="client.js">
-
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 -->	
     
@@ -29,7 +28,7 @@
 	<script src="tools/misc.js"></script>
 	<script src="tools/calendar/calendar.js"></script>
 	<script src="tools/misc.js"> </script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
 </head>
 <body onload="initSite()">
 	<div class="w3-container" id="main">
@@ -65,6 +64,12 @@
 		}
 	}
 
+	var betterClearContent = function(node) {
+		while (node.firstChild != undefined) {
+			node.removeChild(node.firstChild);
+		}
+	}
+
 	function addMenu(base, config) {
 		
 	
@@ -86,13 +91,14 @@
 		var siteNode = document.createTextNode(banner);
 		header.appendChild(siteNode);
 		var navList = navBar.appendChild(document.createElement("ul"));
+
 		var nav = { 
 				 "Home":         goHome, 
 				 "Resume":  	 goAbout,
-//				 "Code Examples": goDemos,
-				 "FileView":     goFiles, 
-				 "charts_demo":  goDB, 
-				 "Test":		 goTest,
+				 "File View":    goFiles, 
+				 "Charts Demo":	 goDB, 
+				 "Development":	 goTest,
+				 "Hobbies":      goHobbies,
 //				 "Code Samples": goCode, 
 //				 "Galleries":    goPics, 
 		};
@@ -102,15 +108,10 @@
 			var listItem = document.createElement("li");
 			var link = listItem.appendChild(document.createElement("a"));
 			listItem.id = "nav"+key;
+			listItem.classList.add("nav");
 			link.appendChild(document.createTextNode(key));
 			link.href="#"; 
 			listItem.addEventListener("click", nav[key]);
-			listItem.addEventListener("mouseover", function() {
-				this.style.backgroundColor = "lightpink";
-			});
-			listItem.addEventListener("mouseout", function() {
-				this.style.backgroundColor = "lavenderblush";
-			});
 			navList.appendChild(listItem);
 		}
 
@@ -126,10 +127,15 @@
 		// For now, the only argument is the target page...
 		var page = args.split("=")[1];
 		if (args.length == 0) {
-			goHome();		
+			goHome();
 		} else {
 			
 			console.log("Target page: " + page + " " + nav[page])
+			// For backwards compatibility with older resume's:
+			if (page == "charts_demo") {
+				page = "Charts Demo";
+			}
+				
 			nav[page]();
 		}
 	}
