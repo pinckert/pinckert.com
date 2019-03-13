@@ -1,22 +1,23 @@
 'use strict';
 //
+//  Dependencies
+//
+//
 //  Notes:
 //       All data is read-only, provided by the DB query (pages.js/goDB())
+//       Requires: .js
 //
 // --------------------------------------------------------------------------------
 //
 //  Generic chart action callback routine
-//
+//			callback = [pieSeclectResponse | barSelectResponse | lineSelectResponse]
 function selectionHandler(chart,chartData, callback) {
 	console.log("in selection handle constructor");
 	return function() {
 			console.log ("in selection handler execution");
 			var selection = chart.getSelection();
-			console.dir(selection);
      		var label = chartData.getValue(selection[0].row, 0);
-			console.dir(label);
 			var value = chartData.getValue(selection[0].row, 1);		
-			console.dir(value);
 			callback(selection, chartData);
 	};
 }
@@ -25,16 +26,12 @@ function selectionHandler(chart,chartData, callback) {
 //
 function pieSelectResponse(selection, chartData) {
 	console.log("in pieSelectResponse");
-	console.dir(selection);
-	console.dir(chartData);
-	console.dir(goDB.data);
+
 	var data = filterDataByFieldValue(goDB.data, "user", chartData.getValue(selection[0].row, 0));
-	var buildList = fixDates(data, "start");
-	var tab = tableFromDictArray(buildList);
-	console.dir(tab);
-	//
-	// TBD figure out how to pass in (and retain) the context.
-	//
+	var buildList = fixValues(data, "start", dateStringFromEpoch);
+	var buildList = fixValues(data, "duration", readableDeltaTime);
+	var tab = sortableTableFromDictArray(buildList, {'number' : sort_int});
+
 	var node = document.getElementById("content");
 	clearContent(node)
 	node.appendChild(tab);
@@ -45,15 +42,14 @@ function pieSelectResponse(selection, chartData) {
 //
 function barSelectResponse(selection, chartData) {
 	console.log("in barSelectResponse");
+	
 	var data = filterDataByFieldValue(goDB.data, "server", chartData.getValue(selection[0].row, 0));
-	var buildList = fixDates(data, "start");
-	var tab = tableFromDictArray(buildList);
-	console.dir(tab);
-	//
-	// TBD figure out how to pass in (and retain) the context.
-	//
+	var buildList = fixValues(data, "start", dateStringFromEpoch);
+	var buildList = fixValues(data, "duration", readableDeltaTime);
+	var tab = sortableTableFromDictArray(buildList, {'number' : sort_int});
+
 	var node = document.getElementById("content");
-	clearContent(node)
+	clearContent(node);
 	node.appendChild(tab);
 }
 
@@ -62,8 +58,19 @@ function barSelectResponse(selection, chartData) {
 //
 function lineSelectResponse(selection, chartData) {
 	console.log("in lineSelectResponse");
-	console.dir(chartData);
+
+	var selectDate = new Date(chartData.getValue(selection[0].row, 0));
+	var data = filterDataByDate(goDB.data, selectDate);
+	var buildList = fixValues(data, "start", dateStringFromEpoch);
+	var buildList = fixValues(data, "duration", readableDeltaTime);
+	var tab = sortableTableFromDictArray(buildList, {'number' : sort_int});
+	
+	var node = document.getElementById("content");
+	clearContent(node);
+	node.appendChild(tab);
+
 }
+//
 //  Routines to interface with google charts.
 //
 //  Pie Chart
@@ -79,7 +86,7 @@ function drawPieChart(parent, data, chartTitle){
 
 		var options = {
 			title: chartTitle,
-			sliceVisibilityThreshold: 0.05,
+			sliceVisibilityThreshold: 0.02,
 			is3D: true
 		};
 
@@ -168,15 +175,34 @@ function extractDataByDate(data, field) {
 	results.unshift([field, "Date"]);  // Axis labels
 	return results;
 }
-
+//
+//   
+//
 function filterDataByFieldValue(data, field, value)
 {
    var results = [];
-   console.log("in filterDataByFieldValue()");
-   console.log("Field = " + field + " Value = " + value);
+
    for (var index in data) {
-	   console.dir(data[index]);
 	   if (data[index][field] == value) {
+		   results.push(data[index]);
+	   }
+   }
+   return results;
+}
+//
+//  value : Date()
+//
+function filterDataByDate(data, value)
+{
+   var results = [];
+
+   console.log("filterDataByDate()");
+
+   var cmpValue = dateStringFromEpoch(value.valueOf());
+   for (var index in data) {
+	   var cmpDate = dateStringFromEpoch(data[index]['start']);
+	   
+	   if (cmpDate == cmpValue) {
 		   results.push(data[index]);
 	   }
    }
@@ -200,7 +226,7 @@ function indexFromStatus(str) {
 			return 2;
 		}
 		default:
-			console.log("unrecognized build result:" + str);
+//			console.log("unrecognized build result:" + str);
 			return 2;
 	}
 }
@@ -241,7 +267,7 @@ function extractExecutionTime(data, field) {
 		if (record["user"] in records) {
 			records[record[field]] += record["duration"];
 		} else {
-			if (record[field] == null) { continue; }
+			if (record[field] == null || record["user"] == "<none>") { continue; }
 			records[record[field]] = record["duration"];
 		}
 	}
@@ -286,18 +312,21 @@ function extractBuildCounts(data, field) {
 //
 
 //
-//  Takes an array of dict's and a field name and attempts to convert epoch times to HR values.
+//  Takes an array of dict's, a field name and a mapping method and applies it to all values.
 //
-function fixDates(list, field)
+function fixValues(list, field, method)
 {
 	var newList = [];
 	for (var index in list) {
 		newList.push(list[index]);
-		newList[index][field] = dateStringFromEpoch(list[index][field]);
+		newList[index][field] = method(list[index][field]);
 	}
 	return newList;
 }
 
+//
+//  Return a date string given the epoch time
+//
 function dateStringFromEpoch(t) {
 
 	var dt = new Date(parseInt(t));
@@ -312,3 +341,23 @@ function dateStringFromEpoch(t) {
 	var str = dt.getFullYear() + "-" + month + "-" + date;
 	return str;
 }
+//
+//  Convert delta time in mSec to hours:minutes:seconds
+//
+function readableDeltaTime(delta)
+{
+	var seconds = delta/10000;
+	var hours = Math.floor(seconds/3600);
+	var minutes = Math.floor((seconds - hours*3600) / 60);
+	var seconds = Math.floor(seconds - (hours * 3600 + minutes * 60));
+
+	if (seconds < 10) {	
+		console.log(seconds);
+		seconds = "0" + seconds.toString();
+	}
+	if (minutes < 10) {
+		minutes = "0" + minutes.toString();
+	}
+	return hours + ":" + minutes + ":" + seconds;
+}
+
