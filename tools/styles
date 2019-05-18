@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use strict';
 
 var styleList = {
@@ -5,4 +6,13 @@ var styleList = {
         "align" : ["border-style", "border",              [  "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "ouset", "none", "hidden"]
    
 }
+=======
+'use strict';
+
+var styleList = {
+//   Property    CSS           Javascript   HTML   Options
+        "align" : ["border-style", "border",              [  "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "ouset", "none", "hidden"]
+   
+}
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 w3-left-align

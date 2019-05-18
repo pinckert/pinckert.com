@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <meta charset="UTF-8">
 <html>
@@ -272,4 +273,164 @@
 			</table>
 			<div id='lineChart'></div>
 	</body>
+=======
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="spinners.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var sessionsByName = {};
+		var allSessions = [];
+		var archivedSessions = [];
+	</script>
+	<script type="text/javascript" src="sessions.js"></script>
+	<script type="text/javascript" src="spinners.js"></script>
+	<title>The Spinners</title>
+	<style>
+	td {
+		text-align: left;
+	}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+
+	window.onload = function() {
+			summaryStats();
+    };
+	
+	function summaryStats() {
+		console.log("Summary Stats()");
+		var opponentData = dumpOpponents();
+
+		var table = document.getElementById("opponent-chart");
+		var opponentTeams = Object.keys(opponentData);
+		for (var i in opponentTeams) {
+			var opponent = opponentData[opponentTeams[i]];
+			table.appendChild(document.createElement("tr"));
+			opponentName = opponentTeams[i];
+			var teamNode = document.createElement("th");
+			teamNode.style.padding = 3;
+			teamNode.innerHTML = opponentName;
+			table.appendChild(teamNode);
+			var playerNode = document.createElement("th")
+			table.appendChild(playerNode);
+			console.log("Opponent: " + opponentName); 
+			console.dir(opponent);
+			var matchDates = opponent.results.map( function (result) {return result.date}).sort();
+			for (var j in matchDates) {
+				var cell = document.createElement("th");
+				var link = "<a href=\"sheets\\" + matchDates[j].replace(/\//g, "_") + ".jpg\">";
+				console.dir(matchDates[j]);
+				console.log(link);
+				cell.innerHTML = link + matchDates[j] + "</a>";
+				table.appendChild(cell);
+			}
+			
+			var players = Object.keys(opponent).sort();
+			for (var k in players) {
+				if (players[k] == 'results' || players[k] == '') continue;
+				var playerNode = table.appendChild(document.createElement("tr"));
+				opponentName = players[k];
+				opponentRank = opponent[opponentName][0].oppRank;
+				console.log("Player rank = " + opponentRank);
+				var emptyCell = document.createElement("td");
+				playerNode.appendChild(emptyCell); 
+				var nameNode = document.createElement("td");
+				nameNode.innerHTML = '[' + opponentRank + '] ' + opponentName;
+				playerNode.appendChild(nameNode);
+				var matches = opponent[opponentName];
+				for (var matchDate in matchDates) {
+					var scoreNode = document.createElement("td");
+					scoreNode.style.padding = 2;
+					for (var l in matches) {
+						if (matches[l].date == matchDates[matchDate]) {
+							scoreNode.innerHTML = matches[l].player + " :<br>" + matches[l].result;
+						}
+					}
+					playerNode.appendChild(scoreNode);
+				}
+			}
+			// Add summary score row
+			table.appendChild(document.createElement("tr"));
+			table.appendChild(document.createElement("th"));
+			table.appendChild(document.createElement("th"));
+			
+			for (var m in matchDates) {
+				for (var n in matchDates) {
+					if (matchDates[m] == opponent.results[n].date) {
+						var score = document.createElement("th");
+						score.innerHTML = opponent.results[n].score;
+						table.appendChild(score);
+						break;
+					}
+				}
+			}
+			// TBD Fix hack in CSS
+			// Add a blank row.
+			table.appendChild(document.createElement("tr"));			
+			var empty = document.createElement("td");
+			empty.innerHTML = "  ";
+			table.appendChild(empty);
+		}
+	}	
+
+	function dumpOpponents() {
+		console.log('Dump Opponents()');
+		allSessions = [currentSession].concat(archivedSessions);
+		rivalTeams = {};
+		for (var i=0; i<allSessions.length; i++) {
+			var session = allSessions[i];
+			for (var j = 0; j<session.matches.length; j++ ) {
+				rivalTeam = session.matches[j].opponent;
+				if (!rivalTeams.hasOwnProperty(rivalTeam)) {
+					rivalTeams[rivalTeam] = {};
+					rivalTeams[rivalTeam].results = [];
+				}
+
+				if (future(session.matches[j].date)) continue;
+				var data = {'date' : session.matches[j].date, 'score' : session.matches[j].score};
+				rivalTeams[rivalTeam].results.push(data);
+				var matches = session.matches[j];
+				
+				for (var k = 0; k<matches.matches.length; k++) {
+					match = matches.matches[k];
+					opponent = match.opponent;
+					if (!rivalTeams[rivalTeam].hasOwnProperty(opponent)) {
+						rivalTeams[rivalTeam][opponent] = [];
+					}
+
+					rivalTeams[rivalTeam][opponent].push({'date' : session.matches[j].date, 'player' :	match.player, 'result' : match.result, 'oppRank': match.oppRank});
+				}
+			}
+		}
+		console.dir(rivalTeams);
+		return rivalTeams;
+	}
+	//
+	//  Used to ignore matches in "sessions.js" that are yet to be played
+	// 
+	function future(date) {
+		var today = new Date;
+		var compare = new Date(date);
+		if (compare > today) {
+			return 1;
+		}
+		return 0;
+	}
+	
+	window.onload = function() {
+			summaryStats();
+    };
+	</script>
+			<table id='opponent-chart'><thead><tr><th>Opponent Team</th><th>Player</th></tr></thead>
+			</table>
+	</body>
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 </html>

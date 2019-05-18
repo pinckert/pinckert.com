@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -72,4 +73,80 @@ function runIt() {
 </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+   <script src="functions.js"></script>
+</head>
+<body onload="runIt()">
+	<p>Running tests... check console log for results</p>
+	<p id="Test6">This entry is for test #6</p>
+<script>
+function runIt() {
+	var i = 0;  // loop counter
+	var myCounts  = [0,0,0,0];   // Test 4
+	var myCounts2 = [0,0,0,0];   // Test 5
+	var myCounts3 = [0,0,0,0];   // Test 6
+	var test6 = document.getElementById("Test6");
+	var myScreenElement = new ScreenElement(test6);
+	test6.style.position = "absolute";
+	var pos = {};
+	var size = {};
+	
+	console.log("*** Test 1 ***");
+	global("one argument");
+	
+	console.log("*** Test 2 ***");
+	console.log(typeof returnsGlobalFunction());
+	
+	console.log("*** Test 3 ***");
+	var myCounts = [0,0,0,0];
+	console.log(typeof aCounter);
+	console.log(typeof aCounter.counter);
+	for (i=0;i<myCounts.length; i++) {
+		myCounts[i] += aCounter();
+	}
+	console.dir(myCounts);
+	
+	console.log("*** Test 4 ***");
+	console.log(typeof bCounter);
+	console.log(typeof bCounter.counter);
+	for (i=0; i<myCounts2.length; i++) {
+		myCounts2[i] += bCounter();
+	}
+	console.dir(myCounts2);
+	
+	console.log("*** Test 5 ***");
+	
+	console.log(typeof aCounterOops);
+	for (i=0; i<myCounts3.length; i++) {
+		myCounts3[i] += aCounterOops()();
+	}
+	console.dir(myCounts3);
+
+	console.log("*** Test 6 ***");
+
+	console.dir(test6);	/*
+	console.dir(myScreenElement);
+	pos = myScreenElement.getPosition();
+	console.log("Position: (" + pos.x + ", " + pos.y + ")");
+	myScreenElement.moveTo(pos.x+150, pos.y+150);
+	pos = myScreenElement.getPosition();
+	console.log("Position: (" + pos.x + ", " + pos.y + ")");
+	*/
+	console.log("Position: (" + test6.style.x + ", " + test6.style.y + ")");
+	test6.style.top = 150;
+	test6.style.right = 150;
+	test6.style.width = 150;
+	test6.style.height = 150;
+	test6.style.backgroundColor = "antiquewhite";
+
+	console.log("Position: (" + test6.style.x + ", " + test6.style.y + ")");
+
+}	
+</script>
+
+</body>
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 </html>

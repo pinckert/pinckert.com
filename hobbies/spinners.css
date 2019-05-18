@@ -1,5 +1,6 @@
 body, select {
   font-family: Helvetica, Arial, sans-serif; /* Nicer font */
+<<<<<<< HEAD
   background-color: rgba(255, 250, 250, 1); 
 }
 body, h2, select, td { font-size: 12px; }
@@ -11,6 +12,12 @@ h3 {font-size: 18px;}
   padding-left: 5px;
 }
 
+=======
+  background-color: rgba(255, 250, 250, 1);
+}
+body, h2, select, td { font-size: 12px; }
+h2 { margin-top: 18px; clear: both; }
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 table {
   color: #333; /* Lighten up font color */
   font-family: Helvetica, Arial, sans-serif; /* Nicer font */
@@ -58,6 +65,7 @@ a.disabled i {
   border-right: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 20px;
+<<<<<<< HEAD
   width: auto;
 }
 
@@ -108,3 +116,8 @@ a.disabled i {
 
   /* -- END DROPDOWN -- */
 
+=======
+}
+
+#content h2, #info h2 { font-weight: bold; }
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7

@@ -3,6 +3,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+<<<<<<< HEAD
 
 	<!-- Imported JS/CSS  -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -23,34 +24,70 @@
 	<script type="text/javascript" src="sessionUtil.js"></script>
 	<script type="text/javascript" src="spinners.js"></script>
 	<script src="../tools/calendar/DOMutil.js"></script>
+=======
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="spinners.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="../tools/calendar/calendar.js"></script>
+	<script src="../tools/calendar/DOMutil.js"</script>
+	<script type="text/javascript">
+		var sessionsByName = {};
+		var allSessions = [];
+		var archivedSessions = [];
+	</script>
+	<script type="text/javascript" src="sessions.js"></script>
+	<script type="text/javascript" src="spinners.js"></script>
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 	<title>The Spinners</title>
 </head>
 <body>
 	<script type="text/javascript">
+<<<<<<< HEAD
 	// APA number, Name, Skill Level, Matches Played.
     let teamStatistics = [
+=======
+		// APA number, Name, Skill Level, Matches Played.
+    var teamStatistics = [
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 			['5973', 'Dean Pinckert',         4, 0],
 			['5334', 'Vishnu Venkatesh',      4, 0],
 			['5973', 'Juan Saba',             7, 0],
 			['6144', 'Harshit Gulati',        6, 0],
 			['6122', 'Peter Chow',            2, 0],
 			['6234', 'Stacey Smith',          2, 0],
+<<<<<<< HEAD
 			['6288', 'Rohan Koundal',         6, 0],
 			['5788', 'Charishma Gairuboyina', 3, 0]
 	];
+=======
+			['6288', 'Rohan Koundal',         5, 0],
+			['6276', 'Shiksha Gupta',         2, 0]
+		];
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 
 	window.onload = function() {
 			initializeDropDown();
 			populateTeamStatistics();
+<<<<<<< HEAD
+=======
+			initCalendar();
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
     };
 	</script>
 
 	<div class="container">
 		<h3>Spinners</h3>
+<<<<<<< HEAD
 		<!-- Navigation Tabs -->
 		<ul class="nav nav-tabs" id="session">
 		</ul>
 		<!-- Landing page : Matches + Team Members-->
+=======
+		<ul class="nav nav-tabs" id="session">
+		</ul>
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 		<div id='content' style='display: block'>
 			<div id='upcoming-section'>
 				<h2>Upcoming matches</h2>
@@ -68,7 +105,11 @@
 			</div>
 
 			<div id='past-section'>
+<<<<<<< HEAD
 				<p><h2>Past matches <i float=left id="past_matches_expand" class="material-icons expand" onclick="toggleTable('past', 'past_matches_expand')">expand_more</i></h2></p>
+=======
+				<h2>Past matches <i id="past_matches_expand" class="material-icons expand" onclick="toggleTable('past', 'past_matches_expand')">expand_more</i></h2>
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 				<table id='past' style='display: none'>
 					<thead>
 						<tr>
@@ -82,7 +123,15 @@
 					<tbody></tbody>
 				</table>
 			</div>
+<<<<<<< HEAD
 		
+=======
+			<div id='team-calendar'>
+				<h2>Calendar (by player: <select id='players' onchange="updateCalendarByPlayer()"></select> )<h2><br>
+				<div id='player-calendar'></div>
+			</div>
+			
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 			<div id='team-stats-section'>
 				<h2>Team Statistics</h2>
 				<table id='team-stats'>
@@ -96,6 +145,7 @@
 				&nbsp;<br>
 				<p>Everyone should have 4 matches prior to the end of the season to be eligible for playoffs. New players should have 10 matches. </p>
 			</div>
+<<<<<<< HEAD
 		</div>
 		<!-- Team Page -->
 		<div id='info' style='display: none'>
@@ -167,6 +217,59 @@
 		<li  id='teamStatsTab' style='display: none'>Team Statistics</li>
 		<div id='teamStats'></div>
 		</div>	
+=======
+			<table id='opponent-chart'><thead><tr><th>Opponent</th></tr></thead>
+			</table>
+		</div>
+		
+		<div id='info' style='display: none'>
+			<h2>League Information</h2>
+		<div style='display: block; width: 200px; float: left; margin-bottom: 20px;'>
+			<table>
+				<tr><th>Links</th></tr>	
+				<tr><td><a href="https://league.poolplayers.com/South-Bay/divisions/">APA Member Login</a></td></tr>
+				<tr><td><a href="https://poolplayers.com/8-9-ball-Rules.pdf">League 8-ball rules</a></td></tr>
+				<tr><td><a href="http://media.poolplayers.com/TMRB/Team-Manual-English.pdf">APA Team Manual</a></td></tr>
+				<tr><td><a href="http://poolplayers.com/pdf/MembershipAp.pdf">APA Membership Application</a></td></tr>
+				<tr><td><a href="http://southbayapa.com">South Bay APA</a></td></tr>				
+				<tr><td>APA Mobile App:<a href="https://itunes.apple.com/us/app/pool-league/id1225739491?mt=8">IOS</a> | <a href="https://play.google.com/store/apps/details?id=league.poolplayers.com">Android</a></td></tr>			
+			</table>
+		</div>
+		<div style='display: block; width: 200px; float: left; margin-bottom: 20px;'>
+			<table>
+				<tr><th>Team Stats</th></tr>	
+				<tr><td><a href="http://www.pinckert.com/hobbies/charts.html">Individual Win-Loss Chart</a></td></tr>
+				<tr><td><a href="http://www.pinckert.com/hobbies/opponents.html">Performance against opposing teams</a></td></tr>
+			</table>
+		</div>
+		<div style='display: block; width: 250px; float: left; margin-bottom: 20px;'>
+			<table>
+				<tr><th>Locations</th></tr>
+				<tr>
+					<td>
+						Lucky Shot Billiards (<a href="https://www.google.com/maps/place/Lucky+Shot+Billiards/@37.3763789,-122.0481474,14z/data=!4m5!3m4!1s0x808fb65db2acbf33:0xf590f97c087f9a8d!8m2!3d37.3763789!4d-122.0306326?hl=en">map</a> / <a href="http://www.luckyshotbilliards.com/">website</a>)
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Edgie's Billiards (<a href="https://www.google.com/maps/place/Edgie's+Billiards/@37.4273071,-121.9050871,15z/data=!4m5!3m4!1s0x808fced17c85b52b:0xbe72969ca828e06!8m2!3d37.4273071!4d-121.896327?hl=en">map</a> / <a href="http://www.edgies.biz/">website</a>)
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Cuetopia (<a href="https://www.google.com/maps/place/Cuetopia+Billiard+Cafe/@37.2616191,-121.8837533,15z/data=!4m5!3m4!1s0x808e33c3dd7977fd:0x4aa5a5f57c7ee2e3!8m2!3d37.2616191!4d-121.8749932?hl=en">map</a> / <a href="http://www.cuetopia.net/">website</a>)
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Sunnyvale Elks (<a href="https://goo.gl/maps/jTJxSeS6Ej82">map</a> / <a href="https://www.elks.org/lodges/home.cfm?LodgeNumber=2128" target="" >website</a>)
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div style='clear: both'></div>
+		</div>
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 	</div>
 </body>
 </html>

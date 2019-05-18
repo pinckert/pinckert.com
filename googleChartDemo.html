@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <html>
   <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -42,4 +43,50 @@
   <body>
     <div id="piechart" style="width: 900px; height: 500px;"></div>
   </body>
+=======
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+	  var globalChart;
+	  var globalDataTable;
+	  
+	  function handleSelect() {
+		var selection = globalChart.getSelection();
+		var label = globalDataTable.getValue(selection[0].row, 0);
+		var value = globalDataTable.getValue(selection[0].row, 1);
+		
+		console.dir(selection);
+		console.dir(value);
+	  }
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+        ]);
+
+        var options = {
+          title: 'My Daily Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+		google.visualization.events.addListener(chart, 'select', handleSelect);
+        chart.draw(data, options);
+		globalDataTable = data;
+		globalChart = chart;
+		
+      }
+    </script>
+  </head>
+  <body>
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+  </body>
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
 </html>

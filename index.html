@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE HTML>
 <meta charset="UTF-8">
 <!-- Copyright 2016-2018 Dean Pinckert  http://www.pinckert.com/copyright.html -->
@@ -143,3 +144,150 @@
 </html>
 
 
+=======
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<!-- Copyright 2016-2018 Dean Pinckert  http://www.pinckert.com/copyright.html -->
+
+<html>
+
+<head>	
+	<meta http-equiv="Cache-Control" content="no-store" />
+	<title>Pinckert.com</title>
+<!-- External includes -->
+	
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!--
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="client.js">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+-->	
+    
+<!--   Local includes -->
+	<link rel="stylesheet" href="styles/site.css">	
+	<image hidden src="images/dean.jpg" id="mypic" align="left" > 
+	<script src="dp_charts.js"></script>
+	<script src="pages.js"></script>
+	<script src="tableHelper.js"></script>
+	<script src="tools/misc.js"></script>
+	<script src="tools/calendar/calendar.js"></script>
+	<script src="tools/misc.js"> </script>
+
+</head>
+<body onload="initSite()">
+	<div class="w3-container" id="main">
+	</div>
+</body>
+
+<script>  // routines to be relocated...
+'use strict';
+
+// Read a file and it's contents to "textNode"	
+	function readFile(remoteFilePath, textNode) {
+	    $(document).ready(function() {
+			$.get(remoteFilePath, function(data) {
+				console.log("readFile: read " + data.length + " bytes :: " + data);
+				textNode.nodeValue = data;
+			}, "text");
+		});
+	}
+	function listFiles(remoteFilePath) {
+	    $(document).ready(function() {
+			$.get(remoteFilePath, function(data) {
+				var node = document.getElementById("content");
+				console.log("readFile: read " + data.length + " bytes :: " + data);
+				var myTable = tableFromFileList(data);
+				node.appendChild(myTable);
+			}, "text");
+		});	
+	}
+    var clearContent = function(node) {
+		var node = document.getElementById("content");
+		while (node.firstChild) {
+			node.removeChild(node.firstChild);
+		}
+	}
+
+	var betterClearContent = function(node) {
+		while (node.firstChild != undefined) {
+			node.removeChild(node.firstChild);
+		}
+	}
+
+	function addMenu(base, config) {
+		
+	
+	}
+	
+</script>
+
+<script>
+	function initSite() {
+		console.log("Beginning initialization script");
+		console.log("loading google charts");
+		google.charts.load('current', {'packages':['corechart']});
+		var header = document.createElement("header");	
+		var navBar = document.createElement("nav");
+		var footer = document.createElement("footer");
+		var content  = document.createElement("content");
+		content.id = "content"
+		var banner   = "Pinckert Software Consulting";
+		var siteNode = document.createTextNode(banner);
+		header.appendChild(siteNode);
+		var navList = navBar.appendChild(document.createElement("ul"));
+
+		var nav = { 
+				 "Home":         goHome, 
+				 "Resume":  	 goAbout,
+				 "File View":    goFiles, 
+				 "Charts Demo":	 goDB, 
+				 "Development":	 goTest,
+				 "Hobbies":      goHobbies,
+//				 "Code Samples": goCode, 
+//				 "Galleries":    goPics, 
+		};
+
+		for (key in nav)
+		{
+			var listItem = document.createElement("li");
+			var link = listItem.appendChild(document.createElement("a"));
+			listItem.id = "nav"+key;
+			listItem.classList.add("nav");
+			link.appendChild(document.createTextNode(key));
+			link.href="#"; 
+			listItem.addEventListener("click", nav[key]);
+			navList.appendChild(listItem);
+		}
+
+		var footNode = document.createTextNode(navigator.userAgent);
+		footer.appendChild(footNode);
+		var main = document.getElementById("main");
+	
+		main.appendChild(header);
+		main.appendChild(navBar);
+		main.appendChild(content);
+		main.appendChild(footer);
+		var args = location.search;
+		// For now, the only argument is the target page...
+		var page = args.split("=")[1];
+		if (args.length == 0) {
+			goHome();
+		} else {
+			
+			console.log("Target page: " + page + " " + nav[page])
+			// For backwards compatibility with older resume's:
+			if (page == "charts_demo") {
+				page = "Charts Demo";
+			}
+				
+			nav[page]();
+		}
+	}
+</script>
+</html>
+
+
+>>>>>>> cb97fa344060fddee1b1b68722c1e6b281f454c7
