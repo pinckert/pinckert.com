@@ -4,6 +4,8 @@
 <!-- A simple slider for selecting time-of-day -->
 </head>
 <body>
+	<title>SVG based time selector</title>
+	<header>SVG based time selector</header>
 	<svg id="time_select" width="400px" height="50px" background-color="antiquewhite">
 		<line id="bar" x1="20" y1="30" x2="300" y2="30" stroke-width="1" stroke="black"/>
 		<polygon id="slider" points="160,30,165,40,155,40,160,30" fill="pink"/><br>
@@ -18,6 +20,7 @@
 		var minutes = Math.round(totalMinutes%60);
 		return {"hour": hours, "minutes" : minutes};
 	}
+	
     function updateTime(percent) {
 		console.log ("Time percent: " + percent);
 		var h = document.getElementById("hours");
@@ -69,7 +72,7 @@
 
 	};
 	control.onwheel = function(event){
-		console.log("Wheel: " + event.wheelDelta);
+//		console.log("Wheel: " + event.wheelDelta);
 		slider.offset = slider.offset + event.wheelDelta/50;
 		slider.offset = slider.offset > (slider.width)/2 ? (slider.width)/2 : slider.offset;
 		slider.offset = slider.offset < -(slider.width/2) ? -(slider.width/2) : slider.offset;		

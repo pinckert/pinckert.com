@@ -13,10 +13,12 @@ import datetime
 import cgi
 import _mysql
 import MySQLdb
+
 #
 #  Local imports
 #
 import time_util
+import db_util
 
 tables = ["builds", "servers", "jobs", "views", "users"]
 columns = [ "project_name", "number", "start", "duration", "result", "server", "user"]
@@ -92,7 +94,8 @@ def showTables(cmd):
 #  Main
 #
 try:
-	conn = MySQLdb.connect (host = "pinckert.veriomysql.com", user = "pinckert", passwd = "Puff2%Dragon", db = "pinckert")
+	db_info = db_util.db_cred()
+	conn = MySQLdb.connect (host = db_info["host"], user = db_info["user"], passwd = db_info["passwd"], db = db_info["db"])
 	cmd = conn.cursor()
 	if cgi.FieldStorage().has_key("show_tables"):
 		showTables(cmd)

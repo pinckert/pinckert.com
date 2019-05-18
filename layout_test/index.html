@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<!-- Copyright 2016-2018 Dean Pinckert  http://www.pinckert.com/copyright.html -->
+
+<html>
+
+<head>	
+	<meta http-equiv="Cache-Control" content="no-store" />
+	<title>Pinckert.com</title>
+<!-- External includes -->
+	
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+  	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <!-- 
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="client.js">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+-->	
+    
+<!--   Local includes -->
+	<link rel="stylesheet" href="site.css">	
+	<image hidden src="../images/dean.jpg" id="mypic" >
+	<script src="dp_charts.js"></script>
+	<script src="pages.js"></script>
+	<script src="DOMUtil.js"></script>
+	<script src="../tools/misc.js"></script>
+	<script src="../tools/calendar/calendar.js"></script>
+	<style>
+
+	</style>
+</head>
+<body onload="initSite()">
+	<header  class="header"  id="header"></header>
+	<nav     class="nav"     id="nav"></nav>
+	<content class="content" id="content"></content>
+	<footer  class="footer"  id="footer"></footer>
+</body>
+
+<script>  // routines to be relocated...
+'use strict';
+//
+//  Nav pages
+//
+const contentPages = {
+		"Home": {
+			"pageID"    : "navHome",
+			"url"       : "", 	
+			"embed" 	  : true,
+			"CSSclass"  : "",
+			"init"      : goHome,
+			"arguments" : {'param' : ['controlId', 'controlType']},
+			"parent"	  : "",
+			"children"  : []    
+		},
+	 	"Resume": {
+			 "pageID"   : "navResume",
+			"url"       : "",
+			"embed" 	  : true,
+			"CSSclass"  : "",
+			"init"      : goAbout,
+			"arguments" : {},
+			"parent"	  : "",
+			"children"  : []    
+		},
+
+	 	"File View"   : {    
+			"pageID"    : "navFileView",
+			"url"       : "",
+			"embed" 	  : true,
+			"CSSclass"  : "",
+			"init"      : goFiles,
+			"arguments" : {},
+			"parent"	  : "",
+			"children"  : []    
+		},
+
+	 	"Charts Demo" : { 
+			"pageID"    : "navChartsDemo",
+			"url"       : "",
+			"embed" 	  : true,
+			"CSSclass"  : "",
+			"init"      : goDB,
+			"arguments" : {},
+			"parent"	  : "",
+			"children"  : []    
+		},
+
+		"Development": {
+			"pageID"    : "navDevelopment",
+			"url"       : "",
+			"embed" 	: true,
+			"CSSclass"  : "",
+			"init"      : goTest,
+			"arguments" : {},
+			"parent"	: "",
+			"children"  : []    
+		},
+
+	 	"Hobbies":  {  
+			"pageID"    : "navHobbies",
+			"url"       : "../hobbies/spinners.html",
+			"embed"    	: true,
+			"CSSclass"  : "",
+			"init"      : goHobbies,
+			"arguments" : {},
+			"parent"	  : "Home",
+			"children"  : {
+					"Info" : {  
+						"pageID"    : "navInfo",
+						"url"       : "",
+						"embed" 	  : false,
+						"CSSclass"  : "",
+						"init"      : undefined,
+						"arguments" : {},
+						"parent"	  : "Hobbies",
+						"children"  : [],
+					},
+					"Opponents" :
+					{  
+						"pageID"    : "navOpponents",
+						"url"       : "",
+						"embed" 	  : false,
+						"CSSclass"  : "",
+						"init"      : undefined,
+						"arguments" : {},
+						"parent"	  : "Hobbies",
+						"children"  : [],
+					},
+					"Charts" : {
+						"pageID"    : "navCharts",
+						"url"       : "",
+						"embed"    	: false,
+						"CSSclass"  : "",
+						"init"      : undefined,
+						"arguments" : {},
+						"parent"	  : "Hobbies",
+						"children"  : [],
+					},
+					"Videos" : {
+						"pageID"    : "navVideos",
+						"url"       : "",
+						"embed" 	  : false,
+						"CSSclass"  : "",
+						"init"      : undefined,
+						"arguments" : {},
+						"parent"	  : "Hobbies",
+						"children"  : [],
+					}
+				}
+		}
+	}
+	
+
+// Read a file and it's contents to "textNode"	
+	function readFile(remoteFilePath, textNode) {
+	    $(document).ready(function() {
+			$.get(remoteFilePath, function(data) {
+				console.log("readFile: read " + data.length + " bytes :: " + data);
+				textNode.nodeValue = data;
+			}, "text");
+		});
+	}
+	function listFiles(remoteFilePath) {
+	    $(document).ready(function() {
+			$.get(remoteFilePath, function(data) {
+				var node = document.getElementById("content");
+				console.log("readFile: read " + data.length + " bytes :: " + data);
+				var myTable = tableFromFileList(data);
+				node.appendChild(myTable);
+			}, "text");
+		});	
+	}
+    var clearContent = function(node) {
+		var node = document.getElementById("content");
+		while (node.firstChild) {
+			node.removeChild(node.firstChild);
+		}
+	}
+
+	var betterClearContent = function(node) {
+		while (node.firstChild != undefined) {
+			node.removeChild(node.firstChild);
+		}
+	}
+
+	function addMenu(base, config) {
+	
+	}
+	
+</script>
+
+<script>
+	'use strict'
+	function initSite() {
+		console.log("Beginning initialization script");
+		console.log("loading google charts");
+		google.charts.load('current', {'packages':['corechart']});
+		let header  = document.getElementById("header");	
+		let navBar  = document.getElementById("nav");
+		let footer  = document.getElementById("footer");
+		let content = document.getElementById("content");
+	
+		let banner   = "Pinckert Software Consulting";
+		let siteNode = document.createTextNode(banner);
+		header.appendChild(siteNode);
+		let navList = navBar.appendChild(document.createElement("ul"));
+
+		// Generate navigation bar based on current content
+
+		Object.keys(contentPages).forEach(pageName => {
+			let listItem = document.createElement("li");
+			listItem.classList.add("dropdown");
+
+			let link = listItem.appendChild(document.createElement("a"));
+			listItem.id = "nav"+pageName;
+			listItem.classList.add("nav");
+			link.appendChild(document.createTextNode(pageName));
+			link.href="#"; 
+			// Menu for submenus : 	
+			let dropdown = document.createElement("div");
+			dropdown.classList.add("dropdown-content");
+			let dropDownLinks = '';
+
+			Object.keys(contentPages[pageName].children).forEach( subPageName => {
+				console.dir(subPageName);
+				console.log("Executing function to add child pages to drop down");
+				 dropDownLinks += `<a href=\"${contentPages[pageName].children[subPageName].URL}\">${subPageName}</a>`;
+			});
+			dropdown.innerHTML = dropDownLinks;
+			listItem.appendChild(dropdown);
+			listItem.addEventListener("click", contentPages[pageName]);
+			navList.appendChild(listItem);
+		});
+
+		let footerText = footer.appendChild(document.createTextNode(navigator.userAgent));
+		var main = document.getElementById("main");
+
+		let args = location.search;
+		// For now, the only argument is the target page...
+
+		if (args.length == 0) {
+			goHome();
+		} else {
+			let page = args.split("=")[1];		
+			console.log("Target page: " + page + " " + nav[page])
+			// For backwards compatibility with older resume's:
+			if (page == "charts_demo") {
+				page = "Charts Demo";
+			}
+			
+			contentPages[page].init(contentPages[page]);
+		}
+	}
+	/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+</script>
+</html>
+
+

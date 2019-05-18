@@ -3,9 +3,13 @@ import time_util
 import re
 # print "Content-type:text/html\n\n"
 
-simple_dict  = {"a" : 1, "b" : 2, "c" : 3}
+#
+#  Python visitor example
+#
+simple_dict   = {"a" : 1, "b" : 2, "c" : 3}
+simple_dict2  = {"d" : 4, "e" : 5, "f" : 6}
 simple_array = [1, 2, 3, 5]
-"""
+
 class base:
 	p = {}
 	def __init__(self, params):
@@ -16,6 +20,16 @@ class base:
 		
 	def accept(self, visitor):
 		visitor.visit(self.p)
+	
+class derived(base):
+	q = {}
+	def __init__(self, base_instance, additional_params):
+		self.p = base_instance.p
+		self.q = additional_params
+		
+	def accept(self, visitor):
+		visitor.visit(self.p)
+		visitor.visit(self.q)
 		
 class base_visitor:
 	def visit(self, d):
@@ -28,17 +42,24 @@ class xml_visitor(base_visitor):
 			print("<%s>%s</%s>") % (key, d[key], key)
 
 if __name__ == "__main__":
-	c = base(simple_dict)
+
+	c1 = base(simple_dict)
+	c2 = derived(c1, simple_dict2)
+	c1.q = simple_dict2
+	
 	d = base_visitor()
 	e = xml_visitor()
 
-	c.accept(d)
-	c.accept(e)
+	c1.accept(d)
+	c1.accept(e)
 
+	c2.accept(d)
+	c2.accept(e)
+	
 """
 # Binary search an array
 # Return array index of an element that matches the value or -1
-"""
+
 def bsearch(value, array):
 	if not isinstance(array, list):
 		print "type(array) != list"
@@ -102,84 +123,60 @@ def matchWords():
 		print "Exception: %s" % e[0]
 		
 matchWords()
-"""
+
 import re
 
-def bracket_type(char):
-    # valid bracket type ensured previously
-    if char == "]":
-        return "brace"
-    if char == ">":
-        return "angle"
-    if char == ")":
-        return "paren"
-    if char == "]":
-        return "square"
+matches = {	"<" : ">",
+			"{" : "}",
+			"[" : "]",
+			"(" : ")"}
 
-def other_counts(type, counts):
-    total = bracket_counts["paren"] + bracket_counts["brace"] + bracket_counts["square"] + bracket_counts["angle"]
-    return total - bracket_counts[type]
-    
+def isMatched(astr):
+	if (len(astr) == 0):
+		return 1
+	if (len(astr) == 1):
+		return 0
+	if not matches.has_key(astr[0]):
+		return 0
+		
 #
-#  return 1 if counts can be update legally, 0 otherwise
+#   if there is a matching pair, remove it and check the remainder of the string.
 #
-def update_counts(char, counts):
-    
-    type = bracket_type(type)
-    if bracket_counts[type] == 0:  # no opening bracket of the same type
-        return 0
-    if other_counts(type, counts) != 0:  #  other bracket is not closed
-        return 0
-    else:
-        bracket_counts[type] += 1
-        return 1
 
-def hasBalancedBrackets(str):
+	matching_index = astr.rfind(matches[astr[0]])
+	if matching_index == -1:
+		return 0;
+	pre = astr[1:matching_index]
+	post = astr[matching_index+1:]
+	print "pre: " + pre + " post: " + post
+	return isMatched(pre) and isMatched(post)
+
+def hasBalancedBrackets(astr):
     # Eliminate the extraneous characters. 
     # How to handle escaped characters in the input sequence?Not specified in requirements...
     
     # remove the extraneous characters so we're just left with a list of brackets.
-	regex = re.compile("[\[\{<\([\]\}<\(]")    # Angle brackets not escaped, all others are.
-	bracket_counts = {"square": 0, "angle" : 0, "brace" : 0, "paren" : 0}
+	regex = re.compile("[\[\{<\([\]\}>\)]")    # Angle brackets not escaped, all others are.
     
-	brackets = regex.findall(str)
-	print brackets
-    # Simple algorithm: if we encounter a closing bracket when OTHER bracket types are not completed
-    # then we have an error. Otherwise decrement the count for the current brakcet
-    
-	for char in brackets:
-		if char == "[":
-			bracket_counts["square"] += 1
-		elif char == "<":
-				bracket_counts["angle"] += 1
-		elif char == "(":
-			bracket_counts["paren"] += 1
-		elif char == "{":
-			bracket_counts["brace"] += 1
-		else:
-			type = bracket_type(char)
-			status = update_counts(char, bracket_counts)
-			if status != 1:
-				return status
-#
-#  If any remaining counts are non-zero it's invalid
-#
-	if bracket_counts["square"] + bracket_counts["angle"] + bracket_counts["paren"] + bracket_counts["brace"] != 0:
-		return 0
-#
-#  No problems!
-#
-	return 1
+	brackets = regex.findall(astr)
+	asString = "".join(brackets)
+	return isMatched(asString);
+
+string = "abcde {0}".format("foo")
+print string
 	
 
+print type("     ")
 print hasBalancedBrackets("")
-print hasBalancedBrackets("{}")
-print hasBalancedBrackets("<{}?")
-print hasBalancedBrackets("{{{{}}}<>}")
+foo = "{}"
+print hasBalancedBrackets(foo)
+print hasBalancedBrackets("<{}>>>")
+print hasBalancedBrackets("{ ( { } ) < [ ] > }")
+print hasBalancedBrackets("{({{})}<>}")
 #
 #   Binary search tests
 #
-"""
+
 array1 = [2, 5, 6, 8,9, 12, 23, 37, 54, 74, 95]
 print bsearch(9, array1)
 print bsearch(6, array1)

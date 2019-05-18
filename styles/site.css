@@ -1,4 +1,13 @@
-img.portraitDean {
+/* Site defaults */
+:root {
+	--main-bg-color:    rgb(255,250,250,1);
+	--main-text-color:  rgb(40,40,40);
+	--main-font:        Helvetica, Arial, sans-serif;
+}
+
+
+/* Home page elements */
+#portraitDean {
     border: 1px solid #ddd;
 	float: left;
     border-radius: 10px;
@@ -6,12 +15,13 @@ img.portraitDean {
 	box-shadow: 10px 10px 5px grey;
 	margin-right: 20px;
 	margin-bottom: 20px;
-	}
-p.portraitDean {
+}
+#portraitDean.p {
 	color: maroon;
 }
 
 .blog {
+	font-family: var(--main-font);
 	font-size: 18px;	
 	color: darkred;
 	text-align: center;
@@ -28,16 +38,45 @@ div.container{
 .date {
 	text-decoration: underline;
 	font-weight: bold;
-	}
+}
 	
+ul.mySubMenu :first-child {
+	margin-top: 5px;
+}	
+ul.mySubMenu :last-child {
+	margin-bottom: 5px;	
+}
+li.mySubMenu {
+	border: 3px inset;
+	margin: 1px 10px 1px 20px;
+	padding: 5px 5px 5px 5px;
+/*	border-width: 2px 2px 2px 2px;
+	border-top: 0px; 
+	border-right: 0px;*/
+}
+
+
+.mySubMenu {
+	position: relative;
+	display: block;
+}
+
+/* resume page */
+
+.resume {
+	height: 600px;
+	width:   75%;
+}
+
 body {
-	background-color: rgb(255,250,250);
+	background-color: 	var(--main-bg-color);
+	font-family: 		var(--main-font);
 	}
 	
 header {
     padding: 1em;
     color: Black;
-    background: linear-gradient(rgb(250,200,200), white);
+    background: linear-gradient(rgb(230,210,210) ,var(--main-bg-color));
     clear: left;
     text-align: left;
 	font-size: 18px;
@@ -47,7 +86,7 @@ footer {
     padding: 1em;
 	font-size: 12px;
     color: black;
-    background: linear-gradient(white, rgb(250,200,200));
+    background: linear-gradient(white, rgb(245,240,240));
     clear: left;
     text-align: center;
 }
@@ -55,8 +94,9 @@ footer {
 nav {
     float: left;
     max-width: 180px;
-    margin: 0;
-    padding: 1em;
+    margin: 0px 3px 0px 3px;
+    padding: 5px 5px 5px 5px;
+
 }
 
 nav ul {
@@ -65,20 +105,27 @@ nav ul {
 }
 nav li {
 	border: 1px solid #000;
-	padding-left: 2px;
-	padding-right: 2px;
-	padding-top: 2px;
+	padding: 2px 2px 2px 2px;
 	margin-top: 2px;
 	border-radius: 4px;
-	background: rgb(255,240,240);
+	background: rgb(250,240,240);
+	border-style: inset;
+
 }
-   
+nav li:hover {
+	background: rgb(230,210,210);	
+}  
+  
 nav ul a {
     text-decoration: none;
 }
-
+/*
+.submenu {
+	border: none;
+}
+*/
 content{
-	margin-top: 40px;
+	margin-top: 10px;
 /*    border: 1px solid pink; */
 	color: black; 
 	font-size: 18; 
@@ -92,53 +139,83 @@ content{
 }
 
 table { 
-color: #333;
-border: 1px solid;
-font-family: monospace;
-font-size: 12px;
-border-collapse: seperate;
-empty-cells: hide;
-border-radius: 10px;
-border-spacing: 0; 
+	color: #333;
+	border: 1px solid;
+	font-family: monospace;
+	font-size: 12px;
+	border-collapse: seperate;
+	empty-cells: hide;
+	border-radius: 10px;
+	border-spacing: 0; 
+}
+
+table tr:first-child td:first-child {
+    border-top-left-radius: 10px;
+}
+
+table tr:first-child td:last-child {
+    border-top-right-radius: 10px;
+}
+
+table thead:first-child td:first-child {
+    border-top-left-radius: 10px;
+}
+
+table thead:first-child td:last-child {
+    border-top-right-radius: 10px;
+}
+
+table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
 }
 
 thead 
 {
-background: (125,125,125);
-color: (16,16,16);
-font-family: ariel;
-font-size: 14;
+	color: (16,16,16);
+	font-family: ariel;
+	font-size: 14;
 }
 
 th {
-background: (170,170,170);     /* Darken header a bit */
-font-weight: bold;
-border: 1px solid transparent; /* No more visible border */
-transition: all 0.3s;          /* Simple transition for hover effect */
+	font-weight: bold;
+	border: 1px solid transparent; /* No more visible border */
+	transition: all 0.3s;          /* Simple transition for hover effect */
+	padding: 6px 12px;
+}
+
+th:hover {
+	background-color: rgb(230,210,210);
+	cursor: pointer;
 }
 
 td {
-background: (260,260,260);
-text-align: left;
-border: 1px solid transparent; /* No more visible border */
-transition: all 0.3s;          /* Simple transition for hover effect */
-
+	text-align: left;
+	border: 1px solid transparent; /* No more visible border */
+	transition: all 0.3s;          /* Simple transition for hover effect */
+	padding: 6px 12px;
 }
 
 tr:nth-child(even) td { background: #F1F1F1; }   
 tr:nth-child(odd) td { background: #FEFEFE; }  
-tr td:hover { background: #FAA; color: #FFF; }
+/* tr td:hover { background: #FAA; color: #FFF; } */
+
+/* specific menu items 
+	 -- better to move to seperate .css?
+*/
 
 table.fileview {
-color:            #222;
-border:           2px solid;
-font-family:      monospace;
-font-size:        18px;
-border-collapse:  seperate;
-empty-cells:      hide;
-border-radius:    10px;
-border-spacing:   4px; 	
-	
+	color:            #222;
+	border:           2px solid;
+	font-family:      monospace;
+	font-size:        18px;
+	border-collapse:  seperate;
+	empty-cells:      hide;
+	border-radius:    10px;
+	border-spacing:   4px; 	
 }
 
 td.fileview {
@@ -146,4 +223,26 @@ td.fileview {
 	padding-right: 3px;
 	padding-top:   3px;
 	text-align:    left;
+}
+
+/* Development Submenu */
+.calendar_page {
+	width: 900px;
+	height: 700px;
+};
+
+.SVG_demo {
+	width: 400px;
+	height: 300px;	
+}
+
+.tableSort_demo {
+	width: 400px;
+	height: 300px;	
+}
+
+.colorChart {
+	width: 1200px;
+	height: 1400px;
+	
 }

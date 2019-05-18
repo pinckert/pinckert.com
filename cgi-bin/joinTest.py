@@ -25,7 +25,7 @@ def bsearch(value, array):
 	else:
 		return bsearch(value, array[offset:])
 
-"""
+
 stuff = {}
 for a in 'abcdefghijklmnopqrstuvwxyz':
 	print "a = " + a
@@ -37,25 +37,26 @@ for a in 'abcdefghijklmnopqrstuvwxyz':
 		
 print stuff
 
-#cat = []
+cat = []
 
 
-#for key in stuff:
-#	cat.append(stuff[key])
+for key in stuff:
+	cat.append(stuff[key])
 
-#str = "abcdefghijklmnop"	
-#print str.replace("jkl","")
+str = "abcdefghijklmnop"	
+print str.replace("jkl","")
 
-#foo = stuff.keys()
-#foo.sort()
+foo = stuff.keys()
+foo.sort()
 
-#for key in foo:
-#	print "%s : %s" % (key, stuff[key])
+for key in foo:
+	print "%s : %s" % (key, stuff[key])
 
 	
-#print "".join(cat)
-#print str(cat)
-"""
+print "".join(cat)
+print str(cat)
+
+'''
 def matchWords(str):
 	str = "TTThis is a smaple string to test regex"
 	try:
@@ -83,4 +84,4 @@ print bsearch(1, [1])
 print bsearch(2, [1])
 print bsearch(2, {"a": 1, "b" : 2})
 
-
+'''

@@ -33,20 +33,22 @@ def buildLinks2(fileList, path):
 			entry["fileLoc"] = fileLoc = "\\"+fileLoc
 			link = "http://www.pinckert.com/cgi-bin/dir.py?path="+path
 			entry["link"] = link
+			file_info.insert(1, entry)
 		else:
 			entry["link"] = "http://www.pinckert.com/"+path+'/'+file
-		file_info.append(entry)
-
+			file_info.append(entry)
+			
 	return file_info;
 
 def buildLinks(fileList,path):
-	linkList = []
+	linkList = []  # a list of html links :-P
 	parentDir = path[:path.rfind('/')]
 	dotdot = str.format("<tr><td><a href='/cgi-bin/dir.py?path={0}'>\\..</a></td></tr>", parentDir)
 	linkList.append(dotdot)
 	for file in fileList:
 		fileLoc = "../"+path+'/'+file
 		bonus = ""
+		isDir = 0
 		displayName = file
 		if os.path.isdir(fileLoc):
 			bonus = "/cgi-bin/dir.py?path="
@@ -68,7 +70,7 @@ def buildPage(content):
 path = "" # directory path from base directory
 isAJAX = False
 
-if 'REQUEST_METHOD' in os.environ:   #handle cgi invocation
+if 'REQUEST_METHOD' in os.environ:   # handle cgi invocation
 	cgitb.enable()
 	form = cgi.FieldStorage()
 	if (form.has_key("path")):

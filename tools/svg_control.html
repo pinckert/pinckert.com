@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- <script src=></script> -->
-	<script src="slider.js"> </script>
 	<link rel="stylesheet" type="text/css" href="slider.css" media="screen" />
 </head>
 <body>
 	<div id ="baseDiv">
 		<svg id="time_select" width="400px" height="50px" background-color="antiquewhite"/>
 	</div>
-	<script>
-		var slide = new slider("time_select", "slide1");
-	</script>
 <script> 
-/*
+
 	// map time from a percentage to a 24-hour clock
 	function mapTime (percentOfDay) {
 		var totalMinutes = Math.round(1440 * percentOfDay);
@@ -83,7 +78,7 @@
 		slider.setAttribute('transform', "translate (" + slider.offset + ", 0)");
 		updateTime((slider.offset+(slider.width/2))/slider.width);		
 	};
-*/
+
 </script>
 </body>
 </html>

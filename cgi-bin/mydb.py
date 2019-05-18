@@ -3,9 +3,11 @@ print "Content-type:text/html\n\n"
 import sys
 import _mysql
 import MySQLdb
+import db_util
 
 try:
-	conn = MySQLdb.connect (host = "pinckert.veriomysql.com", user = "pinckert", passwd = "Puff2%Dragon", db = "pinckert")
+	db_info = db_util.db_cred()
+	conn = MySQLdb.connect (host = db_info["host"], user = db_info["user"], passwd = db_info["passwd"], db = db_info["db"])
 	db = conn.cursor()
 	db.execute("SHOW tables")
 	content = db.fetchone()

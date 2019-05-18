@@ -4,7 +4,17 @@
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
-
+	  var globalChart;
+	  var globalDataTable;
+	  
+	  function handleSelect() {
+		var selection = globalChart.getSelection();
+		var label = globalDataTable.getValue(selection[0].row, 0);
+		var value = globalDataTable.getValue(selection[0].row, 1);
+		
+		console.dir(selection);
+		console.dir(value);
+	  }
       function drawChart() {
 
         var data = google.visualization.arrayToDataTable([
@@ -21,8 +31,11 @@
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
+		google.visualization.events.addListener(chart, 'select', handleSelect);
         chart.draw(data, options);
+		globalDataTable = data;
+		globalChart = chart;
+		
       }
     </script>
   </head>

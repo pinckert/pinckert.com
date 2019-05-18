@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<html>
+<head>
+    <link href="hobbies/spinners.css" rel="stylesheet">
+    <script type="text/javascript" src="DOMUtil.js"></script>
+</head>
+<body>
+    <script>
+    'use strict'
+
+    let mine = {dogs: "German Shepherd", cats: "Siamese", birds: "Falcon"};
+
+    let arrayOfObjects = [
+        mine,
+        {dogs: "Beagle",      cats: "Persian", birds: "Hawk"},
+        {dogs: "Rottweiler",  cats: "Burmese", birds: "Eagle"}
+    ];
+
+    let objectOfArrays = {
+        dogs:  ["German Shepherd", "Beagle", "Rottweiler"],
+        cats:  ["Siamese", "Persian", "Burmese"],
+        birds: ["Falcon", "Eagle", "Hawk"]
+    };
+
+    let arrayOfArrays = [
+        ["dogs", "cats", "birds"],
+        ["German Shepherd", "Beagle", "Rottweiler"],
+        ["Siamese", "Persian", "Burmese"],
+        ["Falcon", "Eagle", "Hawk"]
+    ]
+    window.onload = function() {
+        createTable(arrayOfObjects);
+        createTable2(objectOfArrays);
+        createTable3(mine);
+        createSortableTable(arrayOfObjects);
+        createSortableTable2(arrayOfArrays);
+    }
+
+    function createTable(obj) {
+        console.dir(obj);
+        let tab = document.getElementById('basic');
+        tab.appendChild(tableFromDictArray(obj));
+    };
+
+    function createTable2(obj) {
+        console.dir(obj);
+        let tab = document.getElementById('basic2');
+        tab.appendChild(tableFromObjectArrays(obj));       
+    };
+
+    function createTable3(obj) {
+        let tab = document.getElementById('basic3');
+        tab.appendChild(tableFromDict(obj, "Pets"));
+    }
+
+    function createSortableTable(obj) {
+        console.dir(obj);
+        let tab = document.getElementById('sortable');
+        tab.appendChild(sortableTableFromDictArray(obj, {dogs: sort_alpha, cats: sort_alpha, birds: sort_alpha}));
+    };
+
+    function createSortableTable2(obj) {
+        console.dir(obj);
+        let tab = document.getElementById('sortable2');
+        tab.appendChild(sortableTableFromArrayArrays(obj, [sort_alpha, sort_alpha, sort_alpha]));
+    }
+
+    </script>
+    <table id='basic'></table>
+    <br>
+    <table id='basic2'></table>
+    <br>
+    <table id='basic3'></table>
+    <br>
+    <table id='sortable'></table>
+    <br>
+    <table id='sortable2'></table>
+</body>

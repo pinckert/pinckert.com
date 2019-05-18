@@ -1,0 +1,1 @@
+{"host" : "pinckert.veriomysql.com", "user" : "pinckert", "passwd" : "Puff2%Dragon", "db" : "pinckert"}

@@ -7,7 +7,7 @@
 	<script src="DOMutil.js"> </script>
 	<script src="calendar.js"> </script>
 	<script src="../misc.js"> </script>
-	<link rel="stylesheet" type="text/css" href="calendar.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="../../styles/calendar.css" media="screen" />
 
 	<title>Calendar</title>
 	
@@ -117,7 +117,6 @@
 
 		// * MAIN * 
         var cal = new calendar("test", "myCalendar", monthChangeCallback, clickCallback, hoverCallback);
-		isA(calendar, 1);
         var cal2 = new calendar("test2", "myCalendar2", monthChangeCallback, clickCallback, hoverCallback);
 
 		console.dir(cal);

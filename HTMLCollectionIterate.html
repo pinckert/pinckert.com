@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <!-- consolidated from comments in https://www.stackoverflow.com/questions/3871547/js-iterating-over-result-of-getelementsbyclassname-using-array-foreach/3871602-->
+    <head>
+        <meta charset="UTF-8">
+        <script>
+            window.onload = function(){
+                text = document.getElementById("textSection");
+                for (var i=0; i<10; i++) {
+                    node = document.createElement('p');
+                    node.innerHTML="This is line number " + i;
+                    if (i%2 !=0) {node.classList.add("odd");}
+                    text.append(node);
+                }
+                findTheOddOnes();
+            }
+
+            function findTheOddOnes() {
+                var odds = document.getElementsByClassName("odd");
+                console.dir(odds);
+
+                console.log("ES6 'from' Method:");
+                Array.from(odds).forEach((line) => {
+                    console.log(line.innerHTML);
+                });
+
+                console.log("ES6 'of' Method:");
+                for (line of odds) {
+                    console.log(line.innerHTML);
+                }
+
+                console.log("Call from array prototype");
+                Array.prototype.forEach.call(odds, function(line) {
+                    console.log(line.innerHTML);
+                });
+
+                [].forEach.call(odds, function(line) {
+                    console.log(line.innerHTML);
+                });
+                
+                console.log("Spread Syntax:");  
+                [...odds].forEach((line, index, array) => {
+                    console.log(line.innerHTML);
+                });
+
+                console.log("For Loop:");
+                for(var i=0; i<odds.length; i++) {
+                   console.log(odds[i].innerHTML);
+                };
+
+                console.log("For - in Loop");
+                for(line in odds) {
+                    console.log(line);
+                    console.dir(odds[line].innerHTML);
+                };
+
+                for(var i=0; i<odds.length; i++) {
+                   console.dir(odds[i]);
+                   odds[i].addEventListener('click',  (function(i) {
+                        return function() {
+	                 //   Save current state...
+                            console.dir(odds[i]);
+                        }
+                     })(i));
+                };
+/*
+                Array.from(odds).forEach((line, index, array) => {
+                    console.dir(line,index,array);
+                    line.addEventListener('click', (index) => {
+                        return function () {
+                            console.log(index);
+                            line.style.backgroundColor = 'pink';
+                        }
+                    })(index);
+                });
+*/
+            }
+        </script>
+    </head>
+    <body>
+        <h1>getElementsByClassName Test</h1>
+        <div id="textSection"></div>
+    </body>
+</html>

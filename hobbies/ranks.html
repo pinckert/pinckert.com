@@ -1,0 +1,112 @@
+<meta charset="UTF-8">
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="spinners.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var sessionsByName = {};
+		var allSessions = [];
+		var archivedSessions = [];
+	</script>
+	<script type="text/javascript" src="sessions.js"></script>
+  <script type="text/javascript" src="spinners.js"></script>
+  <script type="text/javascript" src="../tableHelper.js"></script>
+	<title>The Spinners</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        allSessions = [currentSession].concat(archivedSessions);
+        data = teamRanks(allSessions);
+        
+        console.dir(data);/*
+        bubbleData = data.bubble;
+        bubbleData.unshift(['Opponent', 'Rank', 'OppRank', 'Score difference']);
+        var googleData = google.visualization.arrayToDataTable(bubbleData);
+
+        let options = {
+          colorAxis: {colors: ['red', 'green']}, 
+          hAxis: {title: 'Team handicap'},
+          vAxis: {title: 'Opponent handicap'},
+          legend: {title: 'Score difference', positions: 'top', maxLines: 1},
+          title: "Score difference"
+        };
+
+        let chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+        chart.draw(googleData, options);
+        */
+        //
+        //  Scatter Chart
+        //
+        let scatterData = data.scatter;
+        console.dir(scatterData);
+        scatterData.unshift(["Handicap", "Result"]);
+        googleData = google.visualization.arrayToDataTable(scatterData);
+
+        options = {
+          title: 'Handicap difference to score plot',
+          hAxis: {title: 'Handicap difference'},
+          vAxis: {title: 'Score difference'},
+          legend: 'none'
+        };
+
+        let chart2 = new google.visualization.ScatterChart(document.getElementById('chart2_div'));
+        chart2.draw(googleData, options);
+
+        //
+        //  Table of values
+        //
+      console.log("Raw data: ");
+      console.dir(scatterData);
+        let tableData    = sortableTableFromArrayArray(scatterData, sort_int);
+        let scatterTable = document.getElementById("table_data");
+        scatterTable.appendChild(document.createTextNode("Raw Data"));
+        scatterTable.appendChild(tableData);
+      }
+
+      function teamRanks(allSessions) {
+        let matchResults     = {};
+        matchResults.bubble  = [];
+        matchResults.scatter = [];
+
+        for (let i in allSessions) {
+            let teamMatches = allSessions[i].matches;
+		    for (let j in teamMatches) {
+                let result = teamMatches[j].score;
+                if (result == '' || result == 'Opp Forfeit') {continue;}
+                let scores = result.split('-'); 
+                let score = scores[0] - scores[1];
+                let opponent = teamMatches[j].opponent;
+                let teamRank = 0;
+                let oppRank = 0;
+		    	      let playerMatches = teamMatches[j].matches;
+		    	for (let player in playerMatches) {
+                    teamRank += playerMatches[player].rank
+                    oppRank  += playerMatches[player].oppRank;
+                }
+                if (isNaN(teamRank) || isNaN(oppRank) || teamRank == 0 || oppRank < 15) {
+                    continue;
+                }
+                matchResults.bubble.push([opponent, teamRank, oppRank, score]);
+                matchResults.scatter.push([teamRank-oppRank, score]);
+            }
+        }
+        return matchResults;
+    }
+
+    </script>
+  </head>
+  <body>
+
+    <div id="chart2_div" style="width: 900px; height: 500px;"></div>
+<!--    <div id="chart_div"  style="width: 900px; height: 500px;"></div> -->
+    <div id="table_data" style="width: 900px; height: 500px;"></div>
+</body>
+</html>

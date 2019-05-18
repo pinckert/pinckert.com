@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+
+<!-- 
+stateRestore.html
+Copyright: Dean Pinckert 2019, all rights reserved
+
+Demonstrate utilization of the forward/back buttons to provide intuitive navigation
+
+A page with four buttons, named by color, and a message.
+Pressing a button changes the background color of the message and
+	calls history.pushState to store a URI to return to the current color
+
+-->
+
+<html>
+
+<p id="display", style="background-color:cornsilk;">A simple example of history.pushState()</p>
+<button>red</button>
+<button>lightblue</button>
+<button>yellow</button>
+<button>limegreen</button>
+</html>
+
+<script>
+'use strict'
+
+var colors = ['red', 'lightblue', 'yellow', 'limegreen']
+var display = document.getElementById('display');
+var currentState;
+
+var args = location.search;
+var color = args.split("=")[1];   // Only one possible argument, get it's value
+
+// Handle parameter if it exists, otherwise set color to default value
+if (args.length != 0) {
+	display.style.backgroundColor = color;
+} else {
+	color = "cornsilk"
+	display.style.backgroundColor = color;
+	history.pushState("?color="+color, null, null);
+}
+
+var nodes = document.getElementsByTagName('button');
+
+for (var i = 0; i < nodes.length; i++) {
+	console.dir(nodes[i]);
+   nodes[i].addEventListener('click',  (function(i) {
+      return function() {
+	     //   Save current state...
+		currentState = "?color="+display.style.backgroundColor;
+		display.style.backgroundColor = colors[i];
+		history.pushState("?color="+display.style.backgroundColor, null, null); 
+		console.log("Push page, color: " + display.style.backgroundColor);
+      }
+   })(i));
+}
+
+// Called by system object when user hits the back/forward buttons
+window.onpopstate = function(event) {
+	var display = document.getElementById('display'); 
+	var color = event["state"].split('=')[1];
+	console.log("Pop page, color:" + color);
+	display.style.backgroundColor = color;
+}
+</script>

@@ -5,6 +5,12 @@ function formatDate(d) {
 	return d.getMonth() + "/" + d.getDate() + "/" + d.getFullYear();
 }
 
+// Format a delta time as h:m:s format
+function formatDelta(d) {
+	hours = d / 3600
+	d -= hours * 3600
+}
+
 // Write an object's definition to the console.
 function isA(obj, recurseDepth)
 {

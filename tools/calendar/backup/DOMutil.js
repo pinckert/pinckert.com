@@ -17,12 +17,13 @@
 // Returns:   the new node
 // Notes:     Adapted From page 48 of Crane and Pascarello.
 
-function addNode(parent, element, nameId, text)
+function addNode(parent, element, nameId, text, styleClass)
 {   
     var newNode = document.createElement(element);
     parent.appendChild(newNode);
     newNode.setAttribute("id", nameId);
     newNode.setAttribute("name", nameId);
+	newNode.setAttribute("class", styleClass);
     if (text != "")
     {
         var textNode = document.createTextNode(text);

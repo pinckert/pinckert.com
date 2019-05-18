@@ -1,0 +1,275 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="spinners.css" rel="stylesheet">
+
+ 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		var sessionsByName = {};
+		var archivedSessions = [];
+	</script>
+	<script type="text/javascript" src="sessions.js"></script>
+	<script type="text/javascript" src="spinners.js"></script>
+	<script type="text/javascript" src="sessionUtil.js"></script>
+	<title>The Spinners - results by opponent</title>
+
+	<style>
+		td:nth-child(2) {
+			text-align: left;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+
+	const allSessions = archivedSessions.concat([currentSession]);	
+	const colorMap = {'L: 0-3' : 'crimson', 
+					  'L: 0-2' : 'red', 
+					  'L: 1-2' : 'tomato',
+					  'W: 2-1' : 'mediumseagreen', 
+					  'W: 2-0' : 'limegreen', 
+					  'W: 3-0' : 'lime'};
+	var opponentList = [];    // command line list of opposing teams
+
+	//
+	//  List matches by opposing team 
+	//
+	function opponentResultsTable() {
+		console.log("Summary Stats()");
+		const opponentData = orderByOpponents();
+
+		let table = document.getElementById("opponentChart");
+		const opponentTeams = Object.keys(opponentData);
+
+		// Cycle over opponents
+		for (let i in opponentTeams) {
+			const opponent = opponentData[opponentTeams[i]];
+			const teamMatchDates = opponent.results.map( (result) => {return result.date}).sort();
+			const opponentName = opponentTeams[i];
+			// If there is a set of teams specified, use it. Otherwise bail.
+			if (opponentList.length > 0) {
+				if (opponentList.every(teamName => teamName != opponentName.toLowerCase().replace(/ /g, '')))
+					continue;
+			}
+
+			table.appendChild(document.createElement("tr"));
+			let teamNode = document.createElement("th");
+			teamNode.innerHTML = opponentName;
+			table.appendChild(teamNode);
+			let playerNameNode = document.createElement("th")
+			table.appendChild(playerNameNode);
+
+			// Header with links to score sheets.
+			teamMatchDates.forEach(date => {
+				let cell = document.createElement("th");
+				cell.innerHTML = linkify(date);
+				table.appendChild(cell);				
+			});
+
+			// players in opposing team
+			let players = Object.keys(opponent).sort();
+			for (let player of players) {
+				if (player == 'results' || player == '') continue;
+				let playerNode = table.appendChild(document.createElement("tr"));
+
+				let emptyCell = document.createElement("td");
+				playerNode.appendChild(emptyCell); 
+				let nameNode = document.createElement("td");
+				// If player rank hasn't changed, list it only once, otherwise list it for each player match
+				let opponentRanks = opponent[player].map(p => p.oppRank);
+				let rankList = opponentRanks[0];
+				console.dir(opponent[player]);
+				if (!(opponentRanks.every(rank => rank == opponentRanks[0]))) {
+					rankList = opponentRanks.join(', ');
+				}
+				nameNode.innerHTML = `[${rankList}] ${player}`;
+				playerNode.appendChild(nameNode);
+				let matches = opponent[player];
+				for (let matchDate in teamMatchDates) {
+					let scoreNode = document.createElement("td");
+					for (let l in matches) {
+						if (matches[l].date == teamMatchDates[matchDate]) {
+							scoreNode.innerHTML = matches[l].player + " :<br>" + matches[l].result;
+							const bg_color = colorMap[matches[l].result];
+							scoreNode.style.backgroundColor = bg_color;
+						}
+					}
+					playerNode.appendChild(scoreNode);
+				}
+			};
+
+			// Add summary score row
+			table.appendChild(document.createElement("tr"));
+			table.appendChild(document.createElement("th"));
+			table.appendChild(document.createElement("th"));
+
+			teamMatchDates.forEach(date => {
+						let score = document.createElement("th");
+						score.innerHTML = opponent.results.find(score => {return score.date == date}).score;
+						table.appendChild(score);				
+			});
+
+			/*
+			let results = opponent.results.reduce((obj, result) => (
+				obj[result.date] = result.score, obj), {}); 
+
+			results.forEach(result => {
+				let score = document.createElement("th");
+				score.innerHTML = result.score;
+				table.appendChild(score);	
+			}) */
+			console.dir(table);
+			// ugly hack to compensate for design flaw :-P
+			let foo = document.createElement("tr");
+			foo.style.height = '25px';
+			table.appendChild(foo);			
+		}
+	}	
+	//
+	//  Reorder match data by opponent team and opponent player
+	//
+	function orderByOpponents() {
+		console.log('Order by Opponents()');
+		const matches = teamMatches();
+		let rivalTeams = {};
+
+		for (match of matches) {
+			rivalTeam = match.opponent;
+			if (!rivalTeams.hasOwnProperty(rivalTeam)) {
+					rivalTeams[rivalTeam] = {};
+					rivalTeams[rivalTeam].results = [];
+			}
+			if (future(match.date)) continue;
+
+			const data = {'date' : match.date, 'score' : match.score};
+			rivalTeams[rivalTeam].results.push(data);
+			const individualMatches = match.matches;
+
+			for (game of individualMatches) {
+				opp = game.opponent;
+				if (!rivalTeams[rivalTeam].hasOwnProperty(opp)) {
+					rivalTeams[rivalTeam][opp] = [];
+				}
+				rivalTeams[rivalTeam][opp].push({'date'   : match.date, 
+												 'player' : game.player, 
+												 'result' : game.result, 
+												 'oppRank': game.oppRank});
+			}
+		}
+		console.dir(rivalTeams);
+		return rivalTeams;
+	}
+	//
+	//  Used to ignore matches in "sessions.js" that are yet to be played
+	// 
+	function future(date) {
+		const today = new Date;
+		const compare = new Date(date);
+		return (compare > today) ? 1 : 0;
+	}
+
+	// display the number of innings required for the match, by date.
+	function matchInnings() {
+
+		// Array of player matches, by team match
+		const individualMatches = teamMatches().map(matches =>{return matches.matches});
+		// Array of arrays of innings
+		const innings = individualMatches.map(element => {return element.map((game) => game.innings)});
+		// Array of innings per team match
+		const totals = innings.map((match) => {return match.reduce((a,b) => {return a+b;})} );
+		// Dates of matches
+		const dates = teamMatches().map(matches => {return matches.date; });
+		let data = [];
+		for (let i=0; i<dates.length; i++) {
+			if (!(isNaN(totals[i]) || totals[i] == 0)) {
+				data.push([dates[i], totals[i]]);
+			}
+		}
+
+	try {
+
+		data.unshift(["Date", "Innings"]);
+		let googleChartData = google.visualization.arrayToDataTable(data);
+		let options = {
+			title: "Total innings over time",
+			sliceVisibilityThreshold: 0.02,
+			is3D: true,
+			backgroundColor: '#FFFAFA',
+			colors: ['green']
+		};
+
+		let lineChartNode = document.getElementById('lineChart');
+		let chart   = new google.visualization.LineChart(lineChartNode);
+		chart.draw(googleChartData, options);
+
+	}
+
+	catch (err) {
+		console.log("Failed to create chart: "+ err.message);
+	};
+}
+//
+//  Data mangling routines associated with Sessions.js
+// 
+	// list all team matches, agnostic of session.
+	function teamMatches() {
+		return allSessions.map(session => {return session.matches}).flat();
+	};
+
+	// Return unique opponent teams as an iterator
+	function opponentTeams() {
+		return allSessions.reduce((opponents, session) => {
+			session.matches.map(match => match.opponent).forEach(team => opponents.add(team));
+			return opponents;
+		}, new Set());
+	};
+
+	function opponentIndiviualsByTeam() {
+
+	};
+
+	function test1() {
+		console.dir(teamMatches());
+		console.dir(matchInnings());
+		//console.dir(opponentIndiviualsByTeam)
+	};
+
+	// Create a link to the score sheet from the date of the match 
+	// Technically not a date, but a "yyyy-mm-dd" format string.
+	function linkify(date) {
+		return `<a href=\"sheets\/${date.replace(/\//g, "_")}.jpg\">${date}</a>`;
+	}
+
+	//
+	//  Callback from google chart load
+	//
+	function drawCharts()	{
+		let foo = opponentTeams();
+		console.log("Teams: ");
+		console.dir([...foo]);
+		opponentResultsTable();
+		matchInnings();
+	};
+
+	window.onload = function() {
+			google.charts.load('current', {'packages': ['corechart']});
+			google.charts.load('current', {'packages': ['line']});
+
+			let args = location.search;	
+			if (args.length > 0) {
+				opponentList = args.split("=")[1].toLowerCase().replace(/\%20/g,'').split(',');
+			}
+			console.dir(opponentList);
+			google.charts.setOnLoadCallback(drawCharts);
+	};
+
+	</script>
+			<table id='opponentChart'><thead><tr><th>Opponent Team</th><th>Player</th></tr></thead>
+			</table>
+			<div id='lineChart'></div>
+	</body>
+</html>

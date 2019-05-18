@@ -1,7 +1,10 @@
 
 # Collected Data
-data_collection/ApacheCommons/
-data_collection/servers/
+data_collection/A-D/
+data_collection/wily/
 
 # Gallery .jpeg files
 gallery/
+
+# Pool scoresheets
+hobbies/sheets/

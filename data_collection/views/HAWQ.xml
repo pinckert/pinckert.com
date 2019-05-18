@@ -1,1 +1,0 @@
-<buildMonitorView _class='com.smartcodeltd.jenkinsci.plugins.buildmonitor.BuildMonitorView'><description>Apache HAWQ (incubator) projects.</description><job _class='hudson.model.FreeStyleProject'><name>HAWQ-rat</name><url>https://builds.apache.org/job/HAWQ-rat/</url><color>blue</color></job><name>HAWQ</name><url>https://builds.apache.org/view/HAWQ/</url></buildMonitorView>

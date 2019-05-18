@@ -1,25 +1,42 @@
 'use strict';
-//-----------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
-//  Calendar.js                      Copyright 2007, 2016 Dean William Pinckert
+//  Calendar.js                      Copyright 2007, 2016, 2018 Dean William Pinckert
 //
 //  Purpose: Provide an embeddable calendar element.
 //  
 //  Design Notes:   
 
-//------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //  constructor
 //
 //      Parent is the name/id of the parent that we are attaching the calendar to. 
 //      Name is the DOM name/id for the created calendar
 //      Callbacks --
-//         onMonthChange -- called when user increments/decrements month
+//         0onMonthChange -- called when user increments/decrements month
 //         onClick       -- called when a day is clicked  
 //         onHover       -- called when the cursor is hovering over a day
 //------------------------------------------------------------------------------
 
+this.options = {
+	// Owner
+				parent: document,
+	// Call backs:
+				onClick:		undefined,
+				onHover:		undefined,
+				onMonthChange: 	undefined,
+	// Functionality:
+		
+	//  Appearance:
+				hasHeader: true,
+				startDate: new Date(),
+		//  Button images: [left (normal), left (hover), left (button down), right (normal), left (hover), left (button down)]
+			btnImages: ["left.gif", ""]
+				 
+}
+
 function calendar(parent, name, onMonthChange, onClick, onHover) {
-    if (parent == null || parent =="")
+    if (parent == null || parent =="" || parent == undefined)
        this.parent = document;
     else
        this.parent = document.getElementById(parent);
@@ -56,19 +73,18 @@ calendar.daysInMonth = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 //
 //  Design Notes: Might be better to take a date object, than a delta....
 //
-function changeMonth(increment, owner)
-{
+function changeMonth(increment, owner) {
     var calObject = document.getElementById(owner).parent;
+	console.log("Dumping current calendar object:")
+	console.dir(calObject);
     var month = calObject.current.getMonth() + increment;
     var year  = calObject.current.getFullYear();
 
-    if (month < 0)
-    {
+    if (month < 0)  {
        month = 11;
        year -= 1;
     }
-    if (month > 11)
-    {
+    if (month > 11)  {
        month = 0;
        year += 1;
     }
@@ -80,7 +96,6 @@ function changeMonth(increment, owner)
     {
         calObject.monthChangeCallback(calObject.current, nodeList);
     }
-
 }
 
 //------------------------------------------------------------------------------
@@ -99,8 +114,7 @@ function changeMonth(increment, owner)
 //
 // Design Note: probably better to pass in the date as a parameter.
 // 
-calendar.prototype.fill=function()
-{
+calendar.prototype.fill=function() {
    var today = this.current;
    var nodeList = new Array();  // list of nodes that will be passed to client for further additions.
 
@@ -113,8 +127,7 @@ calendar.prototype.fill=function()
    // Loop through the days of the month.
    var daysThisMonth = getDaysInMonth(today);
 
-   for (var i=0; i<daysThisMonth; i++)
-   {
+   for (var i=0; i<daysThisMonth; i++)  {
       var dom=i+1;                       // also need the 'actual' day of month, and not just an index.
       var dow=(offset+i)%7;              // determine which day of the week
       var row=Math.floor((offset+i)/7);  // determine which week of the month
@@ -128,8 +141,7 @@ calendar.prototype.fill=function()
 
       // Update the cell and highlight it if it's today. 
       fillNode(node, dom, 0);
-      if (dom == this.current.getDate() && this.startDate.getMonth() == aDay.getMonth())
-      {
+      if (dom == this.current.getDate() && this.startDate.getMonth() == aDay.getMonth()) {
 			node.style.color = "red";
       }
    }
@@ -143,8 +155,7 @@ calendar.prototype.fill=function()
 //
 //  Purpose: Write the Month/Year to the calendar header
 //
-calendar.prototype.updateHeader=function()
-{
+calendar.prototype.updateHeader=function() {
    var today = this.current;
    var head = document.getElementById(this.name + "tableHeader");
    head.firstChild.nodeValue = calendar.monthName[today.getMonth()] + "  " + today.getFullYear();
@@ -156,17 +167,13 @@ calendar.prototype.updateHeader=function()
 //
 //  Purpose: Clear the contents of the table before re-populating
 //
-calendar.prototype.clearCells=function()
-{
-   for (var row=0; row<6; row++)
-   {
-       for (var i=0; i<7; i++)
-       {
-	      var nodeName = this.name + calendar.dayOfWeek[i] + row;
+calendar.prototype.clearCells=function() {
+   for (var row=0; row<6; row++) {
+       for (var i=0; i<7; i++) {
+	      const nodeName = this.name + calendar.dayOfWeek[i] + row;
        	  var node = document.getElementById(nodeName);
 		  node.style.color = "black";
-          if (node.hasChildNodes())  // required since some cells aren't set
-          {
+          if (node.hasChildNodes()) { // required since some cells aren't set
              clearNode(node);
           }
        }
@@ -179,8 +186,7 @@ calendar.prototype.clearCells=function()
 //
 //  Purpose: Bury the leap-year calculation so it's not in the main-line logic.
 //
-function getDaysInMonth(today)
-{
+function getDaysInMonth(today) {
     var month = today.getMonth();
     if (today.getMonth() != 1)
         return calendar.daysInMonth[month];
@@ -203,8 +209,7 @@ function getDaysInMonth(today)
 //
 //
 
-calendar.prototype.handleClickCallback=function()
-{
+calendar.prototype.handleClickCallback=function() {
     var calObject = document.getElementById(this.myCalendarName).parent;
     var today = calObject.current;
 	
@@ -215,8 +220,7 @@ calendar.prototype.handleClickCallback=function()
     calObject.clickCallback(dayClicked);
 }
 
-calendar.prototype.handleHoverCallback=function()
-{
+calendar.prototype.handleHoverCallback=function() {
     var calObject = document.getElementById(this.myCalendarName).parent;
     var today = calObject.current;
 	if (this.firstChild != null) {
@@ -274,7 +278,8 @@ calendar.prototype.buildTableHeader=function() {
    var leftButtonHolder  = addNode(head, "th","", "", "calendar");       
    var header            = addNode(head, "th", this.name + "tableHeader", "","", "calendar");
    var rightButtonHolder = addNode(head, "th","","", "calendar");
-
+   rightButtonHolder.id  = "rightButton"; 
+   leftButtonHolder.id   = "leftButton";
     // Month and year
    var title = document.createTextNode(calendar.monthName[today.getMonth()] + "  " + today.getFullYear());
    header.appendChild(title);
@@ -284,7 +289,7 @@ calendar.prototype.buildTableHeader=function() {
    // left button (decrement month)
    var leftButton = new Image();
    leftButton.name         = "leftButton";
-   leftButton.id           = "leftButton";
+
    leftButton.selfAlign    = "left";
    leftButton.src          = this.btn_images[0];
    leftButton.style.height = "75%";
@@ -300,10 +305,10 @@ calendar.prototype.buildTableHeader=function() {
    leftButtonHolder.appendChild(leftButton);
    
    // right button
-    rightButtonHolder.aligh  = "right";
+    rightButtonHolder.align  = "right";
     var rightButton = new Image();
 	rightButton.name         = "rightButton";
-	rightButton.id           = "rightButton";
+
 	rightButton.align        = "center";
 	rightButton.src          = this.btn_images[2];
     rightButton.style.height = "75%";

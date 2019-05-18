@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<meta charset="UTF-8">
+<!-- Copyright 2016-2019 Dean Pinckert  http://www.pinckert.com/copyright.html -->
+
+<html>
+
+<head>	
+	<meta http-equiv="Cache-Control" content="no-store" />
+	<title>Pinckert.com</title>
+<!-- External includes -->
+	
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!--
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="client.js">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+-->	
+    
+<!--   Local includes -->
+	<link rel="stylesheet" href="styles/site.css">	
+	<image hidden src="images/dean.jpg" id="mypic" align="left" > 
+	<script src="dp_charts.js"></script>
+	<script src="pages.js"></script>
+	<script src="tableHelper.js"></script>
+	<script src="tools/misc.js"></script>
+	<script src="tools/calendar/calendar.js"></script>
+	<script src="tools/misc.js"> </script>
+
+</head>
+<body onload="initSite()">
+	<div class="w3-container" id="main">
+		<header  id="header"></header>
+		<nav     id="nav"></nav>
+		<footer  id="footer"></footer>
+		<content id="content"></content>
+	</div>
+</body>
+
+<script> 
+'use strict';
+
+window.onload = function() {
+		initSite();
+};
+
+window.onpopstate = function(event) {
+	console.log('Popstate:');
+	console.dir(event);
+	var context = event["state"].split('=')[1];
+	console.log("Resetting to: " + context);
+//	display.style.backgroundColor = color;
+	//  Reset to given context:
+
+}
+// Read a file and it's contents to "textNode"	
+	function readFile(remoteFilePath, textNode) {
+	    $(document).ready(function() {
+			$.get(remoteFilePath, function(data) {
+				console.log("readFile: read " + data.length + " bytes :: " + data);
+				textNode.nodeValue = data;
+			}, "text");
+		});
+	}
+	function listFiles(remoteFilePath) {
+	    $(document).ready(function() {
+			$.get(remoteFilePath, function(data) {
+				var node = document.getElementById("content");
+				console.log("readFile: read " + data.length + " bytes :: " + data);
+				var myTable = tableFromFileList(data);
+				node.appendChild(myTable);
+			}, "text");
+		});	
+	}
+    var clearContent = function(node) {
+		var node = document.getElementById("content");
+		while (node.firstChild) {
+			node.removeChild(node.firstChild);
+		}
+	}
+
+	var betterClearContent = function(node) {
+		while (node.firstChild != undefined) {
+			node.removeChild(node.firstChild);
+		}
+	}
+
+	function addMenu(base, config) {
+
+	};	
+	// non implemented pages
+	function goInfo(){};
+	function goOpponents(){};
+	//
+	// page definitions
+	//
+	const contentPages = {
+		"Home": {
+			"pageID"    : "navHome",
+			"url"       : "", 	
+			"embed" 	: true,
+			"CSSclass"  : "",
+			"init"      : goHome,
+			"arguments" : {'param' : ['controlId', 'controlType']},
+			"parent"	: "",
+			"children"  : []    
+		},
+	 	"Resume": {
+			 "pageID"   : "navResume",
+			"url"       : "",
+			"embed" 	: true,
+			"CSSclass"  : "",
+			"init"      : goAbout,
+			"arguments" : {},
+			"parent"	: "",
+			"children"  : []    
+		},
+
+	 	"File View": {    
+			"pageID"    : "navFileView",
+			"url"       : "",
+			"embed" 	: true,
+			"CSSclass"  : "",
+			"init"      : goFiles,
+			"arguments" : {},
+			"parent"	: "",
+			"children"  : []    
+		},
+
+	 	"Charts Demo": { 
+			"pageID"    : "navChartsDemo",
+			"url"       : "",
+			"embed" 	: true,
+			"CSSclass"  : "",
+			"init"      : goDB,
+			"arguments" : {},
+			"parent"	: "",
+			"children"  : []    
+		},
+
+		"Development": {
+			"pageID"    : "navDevelopment",
+			"url"       : "",
+			"embed" 	: true,
+			"CSSclass"  : "",
+			"init"      : goTest,
+			"arguments" : {},
+			"parent"	: "",
+			"children"  : []    
+		},
+
+	 	"Hobbies":  {  
+			"pageID"    : "navHobbies",
+			"url"       : "//./hobbies/spinners.html",
+			"embed" 	: true,
+			"CSSclass"  : "",
+			"init"      : goHobbies,
+			"arguments" : {},
+			"parent"	: "",
+			"children"  : ["Info", "Opponents", "Charts", "Videos"]
+  	},
+
+		"Info" : {  
+			"pageID"    : "navInfo",
+			"url"       : "",
+			"embed" 	: false,
+			"CSSclass"  : "",
+			"init"      : goInfo,
+			"arguments" : {},
+			"parent"	: "",
+			"children"  : [],
+		},
+
+		"Opponents" : {  
+			"pageID"    : "navOpponents",
+			"url"       : "",
+			"embed" 	: false,
+			"CSSclass"  : "",
+			"init"      : goOpponents,
+			"arguments" : {},
+			"parent"	: "",
+			"children"  : [],
+		}
+	}
+	
+</script>
+
+<script>
+	function initSite() {
+		console.log("Beginning initialization script");
+		console.log("loading google charts");
+		google.charts.load('current', {'packages':['corechart']});
+		var header  = document.getElementById("header");	
+		var navBar  = document.getElementById("nav");
+		var footer  = document.getElementById("footer");
+		var content = document.getElementById("content");
+		var banner   = "Pinckert Software Consulting";
+		var siteNode = document.createTextNode(banner);
+		header.appendChild(siteNode);
+		var navList = navBar.appendChild(document.createElement("ul"));
+
+		for (pageIndex in contentPages) {
+			var page = contentPages[pageIndex];
+
+			// Navigation from home page
+			if (page.parent == "") {
+				var listItem = document.createElement("li");
+				var link = listItem.appendChild(document.createElement("a"));
+				listItem.id = page.pageID;
+				listItem.classList.add("nav");
+				listItem.classList.add("basePage");
+				link.appendChild(document.createTextNode(pageIndex));
+				listItem.onclick =	function(listItem) { 
+										return function () { 
+											console.dir(listItem);
+										};
+									}(listItem);
+				navList.appendChild(listItem);
+			}
+		}	
+
+
+//			console.log("Setting leaving page eventListener: " + id );
+ //  			node.addEventListener('beforeunload',  (function(id) {
+//				console.log("Leaving page : " + id);
+ //   			return function() {
+		     	//   Save current state...
+//					currentState = "?color="+display.style.backgroundColor;
+//					display.style.backgroundColor = colors[i];
+//					history.pushState("?page="+, null, null); 
+//				console.log("Callback for push pageState: " + id);
+//			    }
+//			})(node.id))
+
+		var footNode = document.createTextNode(navigator.userAgent);
+		footer.appendChild(footNode);
+		var main = document.getElementById("main");
+
+		main.appendChild(header);
+		main.appendChild(navBar);
+		main.appendChild(content);
+		main.appendChild(footer);
+		var args = location.search;		
+		// For now, the only argument is the target page...
+		var page = args.split("=")[1];
+		if (args.length == 0) {
+			goHome();
+		} else {
+			
+			console.log("Target page: " + page + " " + contentPages[page].init(contentPages[page]))
+			// For backwards compatibility with older resume's:
+	
+			contentPages[page].init(null, contentPages[page]);
+		}
+	}
+</script>
+</html>
+
+

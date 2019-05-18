@@ -1,6 +1,0 @@
-<listView _class='hudson.model.ListView'><description>&lt;img src="http://tika.apache.org/tika.png" alt="Tika Logo"&gt; 
-&lt;p&gt;
-  &lt;a href="http://tika.apache.org"&gt;&lt;b&gt;Apache Tika&lt;/b&gt;&lt;/a&gt; - a content analysis toolkit&lt;/p&gt;
-&lt;p&gt;
-The Apache Tika toolkit detects and extracts metadata and structured text content from various documents using existing parser libraries. 
-&lt;/p&gt;</description><job _class='hudson.maven.MavenModuleSet'><name>tika-2.x</name><url>https://builds.apache.org/job/tika-2.x/</url><color>blue</color></job><job _class='hudson.maven.MavenModuleSet'><name>tika-2.x-windows</name><url>https://builds.apache.org/job/tika-2.x-windows/</url><color>blue</color></job><job _class='hudson.maven.MavenModuleSet'><name>Tika-trunk</name><url>https://builds.apache.org/job/Tika-trunk/</url><color>blue</color></job><job _class='hudson.maven.MavenModuleSet'><name>tika-trunk-jdk1.7</name><url>https://builds.apache.org/job/tika-trunk-jdk1.7/</url><color>disabled</color></job><job _class='hudson.maven.MavenModuleSet'><name>tika-trunk-jdk1.8</name><url>https://builds.apache.org/job/tika-trunk-jdk1.8/</url><color>disabled</color></job><name>Tika</name><url>https://builds.apache.org/view/Tika/</url></listView>
